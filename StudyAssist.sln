@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist", "StudyAssist\StudyAssist.csproj", "{78524A6F-A617-42DB-824D-48CFD8AF23BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistModel", "StudyAssistModel\StudyAssistModel.csproj", "{B4332724-CA19-453F-94F3-5688F608A338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistInterfaces", "StudyAssistInterfaces\StudyAssistInterfaces.csproj", "{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78524A6F-A617-42DB-824D-48CFD8AF23BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78524A6F-A617-42DB-824D-48CFD8AF23BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78524A6F-A617-42DB-824D-48CFD8AF23BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78524A6F-A617-42DB-824D-48CFD8AF23BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4332724-CA19-453F-94F3-5688F608A338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4332724-CA19-453F-94F3-5688F608A338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4332724-CA19-453F-94F3-5688F608A338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4332724-CA19-453F-94F3-5688F608A338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
