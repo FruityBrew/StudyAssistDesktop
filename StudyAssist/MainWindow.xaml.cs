@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StudyAssist.ViewModel;
 
 namespace StudyAssist
 {
@@ -20,9 +21,16 @@ namespace StudyAssist
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainViewModel _mainVM;
+
         public MainWindow()
         {
+            
+            _mainVM = new MainViewModel();
+            
             InitializeComponent();
+
+            this.DataContext = _mainVM;
         }
     }
 }

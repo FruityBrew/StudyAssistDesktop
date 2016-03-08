@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistModel", "StudyAs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistInterfaces", "StudyAssistInterfaces\StudyAssistInterfaces.csproj", "{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistIoC", "StudyAssistIoC\StudyAssistIoC.csproj", "{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage", "FileStorage\FileStorage.csproj", "{3472C8C0-5B0E-409B-B1FC-93262CDD0746}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

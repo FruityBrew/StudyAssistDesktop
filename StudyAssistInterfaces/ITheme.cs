@@ -6,10 +6,10 @@ namespace StudyAssistInterfaces
     public interface ITheme
     {
         String Name { get; set; }
-        DateTime CreateDate { get; set; }
+        DateTime CreationDate { get; set; }
         DateTime RepeatDate { get; set; }
 
-        Byte Study { get; set; }
+        Byte StudyLevel { get; set; }
 
         Boolean IsStudy { get; set; }
 

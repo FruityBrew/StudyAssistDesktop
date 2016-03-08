@@ -7,7 +7,7 @@ namespace StudyAssistInterfaces
         String Question { get; set; }
         String Answer { get; set; }
 
-        Byte Study { get; set; }
+        Byte StudyLevel { get; set; }
 
         Boolean IsStudy { get; set; }
     }

@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -55,6 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\XBaseViewModel.cs" />
+    <Compile Include="ViewModel\XCategoryVM.cs" />
+    <Compile Include="ViewModel\XProblemVM.cs" />
+    <Compile Include="ViewModel\XThemeVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +102,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FileStorage\FileStorage.csproj">
+      <Project>{3472c8c0-5b0e-409b-b1fc-93262cdd0746}</Project>
+      <Name>FileStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StudyAssistInterfaces\StudyAssistInterfaces.csproj">
+      <Project>{a2cd8d0d-a85b-488f-9ac5-5922ac8cef21}</Project>
+      <Name>StudyAssistInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StudyAssistIoC\StudyAssistIoC.csproj">
+      <Project>{22948ea6-c8b2-4c3e-9f3d-d3fee3d6e4a0}</Project>
+      <Name>StudyAssistIoC</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
