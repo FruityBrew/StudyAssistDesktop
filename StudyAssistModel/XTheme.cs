@@ -15,7 +15,7 @@ namespace StudyAssistModel
         String _name;
         Byte _studyLevel;
         Boolean _isStudy;
-        ObservableCollection<IProblem> _problems;    
+        ObservableCollection<IProblem> _problems;
 
         #endregion
 

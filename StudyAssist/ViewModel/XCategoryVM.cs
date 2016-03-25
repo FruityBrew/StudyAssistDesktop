@@ -46,7 +46,8 @@ namespace StudyAssist.ViewModel
             set
             {
                 Category.Name = value;
-                RaisePropertyChanged(this, "Name");
+           //     RaisePropertyChanged(this, "Name");
+                Save();
             }
         } 
 
@@ -58,7 +59,7 @@ namespace StudyAssist.ViewModel
             }
         }
 
-        private XThemeVM SelectedTheme
+        public XThemeVM SelectedTheme
         {
             get
             {
@@ -75,7 +76,6 @@ namespace StudyAssist.ViewModel
 
         }
 
-
         #endregion
 
         #region methods
@@ -84,15 +84,22 @@ namespace StudyAssist.ViewModel
             _themesObsColl = new ObservableCollection<XThemeVM>();
             foreach(var theme in Category.Themes)
             {
-                _themesObsColl.Add(new XThemeVM(theme));
+                XThemeVM th = new XThemeVM(theme, Save);
+                th.Save = this.Save;
+                _themesObsColl.Add(th);
             }
             _themesObsColl.CollectionChanged += ThemesObsColl_CollectionChanged;
             _themesCVS = new CollectionViewSource();
             _themesCVS.Source = _themesObsColl;
             _themesCVS.View.CurrentChanged += View_CurrentChanged;
-            PropertyChanged += XCategoryVM_PropertyChanged;
+
          }
 
+         private void Save()
+         {
+            IStorageItem storItem = ((IStorageItem)this.Category);
+            storItem.SaveItem(storItem);
+        }
 
         #endregion
 
@@ -102,11 +109,15 @@ namespace StudyAssist.ViewModel
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                  Category.Themes.Add(((XThemeVM)e.NewItems[0]).Theme);            
+                 XThemeVM theme = e.NewItems[0] as XThemeVM;
+                 theme.Save = this.Save;
+                 Category.Themes.Add(theme.Theme);
             }
 
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                Category.Themes.Remove((ITheme)e.OldItems[0]);  
+                Category.Themes.Remove((ITheme)e.OldItems[0]);
+
+            Save();
         }
 
 
@@ -115,13 +126,8 @@ namespace StudyAssist.ViewModel
             RaisePropertyChanged(this, "SelectedTheme");
         }
 
-        private void XCategoryVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            IStorageItem storItem = ((IStorageItem)this.Category);
-            storItem.SaveItem(storItem);
-        }
-        #endregion
 
+        #endregion
 
 
     }

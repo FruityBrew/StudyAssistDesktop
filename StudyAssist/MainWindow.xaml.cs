@@ -32,5 +32,11 @@ namespace StudyAssist
 
             this.DataContext = _mainVM;
         }
+
+
+        private void ButtonShowAnswer_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

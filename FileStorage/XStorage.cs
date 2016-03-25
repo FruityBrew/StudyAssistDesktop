@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 
 namespace FileStorage
 {
@@ -36,10 +37,9 @@ namespace FileStorage
             get { return _instance; }
         }
 
-
         #endregion
 
-        #region method
+        #region methods
 
         public IEnumerable<IStorageItem> LoadItems()
         {
@@ -107,6 +107,11 @@ namespace FileStorage
             {
                 throw new ArgumentException("Нельзя найти файл удаляемого аргумента Item");
             }
+        }
+
+        public void SaveChange()
+        {
+            Parallel.ForEach(_itemFiles, item => SaveItem(item.Key));
         }
 
         private FileInfo GenerateNewFileName()

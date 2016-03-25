@@ -6,6 +6,7 @@ using System.Windows.Data;
 using Ninject;
 using System.ComponentModel;
 
+
 namespace StudyAssist.ViewModel
 {
     public class XThemeVM : XBaseViewModel
@@ -15,7 +16,9 @@ namespace StudyAssist.ViewModel
         ITheme _theme;
         ObservableCollection<XProblemVM> _problemsObsColl;
         CollectionViewSource _problemsCVS;
-
+        ObservableCollection<XProblemVM> _problemsToRepeatObsColl;
+        CollectionViewSource _problemsToRepeatCVS;
+        Action _save;
 
         #endregion
 
@@ -27,26 +30,35 @@ namespace StudyAssist.ViewModel
             Init();
         }
 
-
-
-        public XThemeVM(ITheme theme)
+        public XThemeVM(ITheme theme, Action save)
         {
             _theme = theme;
+            this.Save = save;
             Init();
         }
         
         private void Init()
-        {
+        {      
             _problemsObsColl = new ObservableCollection<XProblemVM>();
-            _problemsObsColl.CollectionChanged += ProblemsObsColl_CollectionChanged;
+            _problemsToRepeatObsColl = new ObservableCollection<XProblemVM>();
             foreach (var problem in _theme.Problems)
             {
-                _problemsObsColl.Add(new XProblemVM(problem));
+                XProblemVM prob = new XProblemVM(problem, Save);
+                _problemsObsColl.Add(prob);
+                if (prob.RepeatDate <= DateTime.Today && !prob.IsStudy)
+                    _problemsToRepeatObsColl.Add(prob);
             }
+            _problemsObsColl.CollectionChanged += ProblemsObsColl_CollectionChanged;
+
             _problemsCVS = new CollectionViewSource();
             _problemsCVS.Source = _problemsObsColl;
-            _problemsCVS.View.CollectionChanged += View_CollectionChanged;
+            _problemsCVS.View.CurrentChanged += View_CurrentChanged;
+
+            _problemsToRepeatCVS = new CollectionViewSource();
+            _problemsToRepeatCVS.Source = _problemsToRepeatObsColl;
+            _problemsToRepeatCVS.View.CurrentChanged += ProblemsToRepeat_CurrentChanged;
         }
+
 
 
         #endregion
@@ -59,7 +71,6 @@ namespace StudyAssist.ViewModel
             {
                 return _problemsObsColl;
             }
-
         }
 
         public Boolean IsStudy
@@ -71,6 +82,7 @@ namespace StudyAssist.ViewModel
             set
             {
                 _theme.IsStudy = value;
+                Save();
             }
         }
 
@@ -84,29 +96,11 @@ namespace StudyAssist.ViewModel
             set
             {
                 _theme.Name = value;
+    //            RaisePropertyChanged(this, "Name");
+                Save();
             }
         }
 
-        public DateTime CreationDate
-        {
-            get
-            {
-                return _theme.CreationDate;
-            }
-        }
-
-        public DateTime RepeatDate
-        {
-            get
-            {
-                return _theme.RepeatDate;
-            }
-            set
-            {
-                _theme.RepeatDate = value;
-            }
-
-        }
 
         public ICollectionView ProblemsCollView
         {
@@ -116,11 +110,27 @@ namespace StudyAssist.ViewModel
             }
         }
 
-        private XProblemVM SelectedProblem
+        public XProblemVM SelectedProblem
         {
             get 
             {
                 return ProblemsCollView.CurrentItem as XProblemVM;
+            }
+        }
+
+        public ICollectionView ProblemsToRepeatView
+        {
+            get
+            {
+                return _problemsToRepeatCVS.View;
+            }
+        }
+
+        public XProblemVM SelectedProblemToRepeat
+        {
+            get
+            {
+                return ProblemsToRepeatView.CurrentItem as XProblemVM;
             }
         }
 
@@ -132,6 +142,19 @@ namespace StudyAssist.ViewModel
             }
         }
 
+        public Action Save
+        {
+            get
+            {
+                return _save;
+            }
+
+            set
+            {
+                _save = value;
+            }
+        }
+
         #endregion
 
 
@@ -140,16 +163,28 @@ namespace StudyAssist.ViewModel
         private void ProblemsObsColl_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                _theme.Problems.Add((IProblem)e.NewItems[0]);
+            {
+                XProblemVM problem = e.NewItems[0] as XProblemVM;
+                problem.Save = this.Save;
+                    _theme.Problems.Add(problem.Problem);
+
+            }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
                 _theme.Problems.Remove((IProblem)e.OldItems[0]);
+
+            Save();
         }
 
-        private void View_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void View_CurrentChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged(this, "SelectedProblem");
         }
 
+
+        private void ProblemsToRepeat_CurrentChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(this, "SelectedProblemToRepeat");
+        }
         #endregion
     }
 }

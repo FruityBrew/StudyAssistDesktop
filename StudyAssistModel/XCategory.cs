@@ -18,6 +18,8 @@ namespace StudyAssistModel
         [NonSerialized]
         Action<IStorageItem> _deleteItem;
 
+
+
         #endregion
 
         #region ctors
@@ -30,14 +32,9 @@ namespace StudyAssistModel
 
 
 
-        private void Themes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Save();
-        }
-
         #endregion
 
-        #region 
+        #region properties
         public string Name
         {
             get
@@ -50,7 +47,7 @@ namespace StudyAssistModel
                 if (String.IsNullOrEmpty(value))
                     throw new ArgumentException("Название категории не может быть пустым");
                 else
-                _name = value;
+                    _name = value;
             }
         }
 
@@ -90,6 +87,7 @@ namespace StudyAssistModel
         }
 
 
+
         #endregion
 
         #region methods
@@ -110,6 +108,15 @@ namespace StudyAssistModel
         {
             if (DeleteItem != null)
                 DeleteItem(this);
+        }
+
+        #endregion
+
+        #region eventHandlers
+
+        private void Themes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //Save();
         }
 
         #endregion

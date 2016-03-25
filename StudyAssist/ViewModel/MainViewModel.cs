@@ -14,6 +14,8 @@ namespace StudyAssist.ViewModel
 
         IModel _model;
         ObservableCollection<XCategoryVM> _categoriesObsColl;
+        //ObservableCollection<XCategoryVM> _categoriesObsCollToRepeat;
+       // CollectionViewSource _categoryToRepeatCVS;
         CollectionViewSource _categoriesCVS;
 
         #endregion
@@ -24,6 +26,7 @@ namespace StudyAssist.ViewModel
         {
             _model = XKernel.Instance.Get<IModel>();
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
+       //     _categoriesObsCollToRepeat = new ObservableCollection<XCategoryVM>();
             foreach(var category in _model.Categories)
             {
                 _categoriesObsColl.Add(new XCategoryVM(category));
@@ -67,6 +70,8 @@ namespace StudyAssist.ViewModel
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
                 _model.Categories.Remove((ICategory)e.OldItems[0]);
+
+            //_model.SaveChange();
         }
 
         private void View_CurrentChanged(object sender, EventArgs e)

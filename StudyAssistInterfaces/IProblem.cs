@@ -7,8 +7,21 @@ namespace StudyAssistInterfaces
         String Question { get; set; }
         String Answer { get; set; }
 
-        Byte StudyLevel { get; set; }
+        DateTime CreationDate
+        { get; }
+
+        DateTime AddingToStudyDate { get; }
+
+        DateTime RepeatDate { get; }
+
+        Byte StudyLevel { get; }
 
         Boolean IsStudy { get; set; }
+
+        void StudyLevelUp();
+        void StudyLevelDown();
+        void MoveToTomorrow();
+        void RemoveFromStudy();
+        void AddToStudy();
     }
 }

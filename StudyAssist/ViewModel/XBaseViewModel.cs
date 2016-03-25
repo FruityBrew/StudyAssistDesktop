@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudyAssist.ViewModel
 {
@@ -11,7 +7,7 @@ namespace StudyAssist.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged = null;
 
-        public void RaisePropertyChanged(Object sender, String propertyName)
+        protected void RaisePropertyChanged(Object sender, String propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

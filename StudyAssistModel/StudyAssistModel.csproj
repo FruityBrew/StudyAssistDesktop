@@ -44,6 +44,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XCategory.cs" />
     <Compile Include="XProblem.cs" />
+    <Compile Include="XStadySheduler.cs" />
     <Compile Include="XTheme.cs" />
   </ItemGroup>
   <ItemGroup>

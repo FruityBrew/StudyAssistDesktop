@@ -61,6 +61,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\XBaseViewModel.cs" />
     <Compile Include="ViewModel\XCategoryVM.cs" />
+    <Compile Include="ViewModel\XCommand.cs" />
     <Compile Include="ViewModel\XProblemVM.cs" />
     <Compile Include="ViewModel\XThemeVM.cs" />
     <Page Include="MainWindow.xaml">

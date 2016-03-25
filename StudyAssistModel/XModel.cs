@@ -7,9 +7,24 @@ namespace StudyAssistModel
 {
     public class XModel : IModel
     {
+        #region fields
 
-        ObservableCollection<ICategory> _categories;    
+        ObservableCollection<ICategory> _categories;
 
+        #endregion
+
+
+        #region ctors
+
+        public XModel()
+        {
+            Init();
+        }
+
+        #endregion  
+
+
+        #region properties
         public ObservableCollection<ICategory> Categories
         {
             get
@@ -18,11 +33,9 @@ namespace StudyAssistModel
             }
         }
 
-        public XModel()
-        {
-            Init();
-        }
+        #endregion 
 
+        #region methods
 
         public void Init()
         {
@@ -35,6 +48,16 @@ namespace StudyAssistModel
                 }
             _categories.CollectionChanged += Categories_CollectionChanged;
         }
+
+        public void SaveChange()
+        {
+            XStorage.Instance.SaveChange();
+        }
+
+
+        #endregion
+
+        #region eventHandlers
 
         private void Categories_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -50,5 +73,7 @@ namespace StudyAssistModel
                // ((IStorageItem)e.OldItems[0]).Delete();
             }
         }
+
+        #endregion
     }
 }

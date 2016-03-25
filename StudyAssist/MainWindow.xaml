@@ -8,50 +8,126 @@
         Title="MainWindow" Height="750" Width="1000">
     <Grid>
         <TabControl x:Name="XTabControl" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Stretch" Background="AliceBlue" >
-            <TabItem x:Name="XTabItemToday" Header="Сегодня" Style="{StaticResource XStyleToTab}">
+            <TabItem x:Name="XTabItemAll" Header="Всё" Style="{StaticResource XStyleToTab}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"></RowDefinition>
-                        <RowDefinition Height="100"></RowDefinition>
-                        <RowDefinition Height="40"></RowDefinition>
                         <RowDefinition Height="1"></RowDefinition>
+                        <RowDefinition Height="150"></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250*" MinWidth="300"></ColumnDefinition>
+                        <ColumnDefinition Width="450" MinWidth="300"></ColumnDefinition>
                         <ColumnDefinition Width="250*" MinWidth="300"></ColumnDefinition>
                         <ColumnDefinition Width="1"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="XLabelNameListviewExams" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
-                    <DataGrid x:Name="XDataGridCategories" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+                    <Grid Grid.Column="0" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="1*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <Label Grid.Row="0" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+                        <DataGrid x:Name="XDataGridCategories_All" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*" FontSize="14" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <DataGrid x:Name="XDataGridThemes_All" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название темы" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*" FontSize="14"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+
+                    
+                    <DataGrid x:Name="XDataGridProblems_All" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedCategory.SelectedTheme.ProblemsCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}"  />
+                            <DataGridTextColumn Header="Вопросы" Binding="{Binding Question}" ElementStyle="{StaticResource TextBlockStyle}" Width="300*" FontSize="14" />
                         </DataGrid.Columns>
                     </DataGrid>
-
-                    <DataGrid x:Name="XDataGridThemes" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название темы" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                    <DataGrid x:Name="XDataGridProblems" Grid.Row="4" Grid.ColumnSpan="6" Grid.Column="0" ItemsSource="{Binding Client.TodayDragPlanCVSView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Вопросы" Binding="{Binding Question}" ElementStyle="{StaticResource TextBlockStyle}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Ответы" Binding="{Binding Answer}" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
+                    <Label Content="Ответ" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center"></Label>
+                    <TextBox Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" FontSize="16" Text="{Binding SelectedCategory.SelectedTheme.SelectedProblem.Answer}" AcceptsReturn="True" AcceptsTab="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
                 </Grid>
             </TabItem>
-       
 
+            <TabItem x:Name="XTabItemRepeate" Header="Повторить" Style="{StaticResource XStyleToTab}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1"></RowDefinition>
+                        <RowDefinition Height="150"></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="450" MinWidth="300"></ColumnDefinition>
+                        <ColumnDefinition Width="250*" MinWidth="300"></ColumnDefinition>
+                        <ColumnDefinition Width="1"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="1*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <Label Grid.Row="0" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+                        <DataGrid x:Name="XDataGridCategories" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}" Width="210"  FontSize="14"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <DataGrid x:Name="XDataGridThemes" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название темы" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" ElementStyle="{StaticResource TextBlockStyle}" Width="250*"  FontSize="14"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="100"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Показать ответ" Style="{StaticResource XStyleToButton}" Margin="3" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblemToRepeat.ShowAnswerCommand}" Click="ButtonShowAnswer_Click"/>
+                            <Button Content="Зачесть" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblemToRepeat.LevelUpCommand}" Margin="3"></Button>
+                            <Button Content="Отложить на завтра" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblemToRepeat.MoveToTomorrowCommand}" Margin="3"/>
+                        </StackPanel>
+                    </Grid>
+                    <DataGrid x:Name="XDataGridProblems" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedCategory.SelectedTheme.ProblemsToRepeatView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Вопросы" Binding="{Binding Question}" ElementStyle="{StaticResource TextBlockStyle}" Width="300*"  FontSize="14"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label Content="Ответ" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center"></Label>
+                    <TextBox Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="{Binding SelectedCategory.SelectedTheme.SelectedProblemToRepeat.RepeatAnswer}" AcceptsReturn="True" AcceptsTab="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  FontSize="16"/>
+                </Grid>
+            </TabItem>
         </TabControl>
 
-
-
-</Grid>
+    </Grid>
 </Window>
