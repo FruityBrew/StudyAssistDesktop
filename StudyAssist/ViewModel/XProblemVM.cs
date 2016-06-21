@@ -21,9 +21,7 @@ namespace StudyAssist.ViewModel
         {
             _problem = XKernel.Instance.Get<IProblem>();
 
-            LevelUpCommand = new XCommand(StudyLevelUp);
-            ShowAnswerCommand = new XCommand(ShowAnswer);
-            MoveToTomorrowCommand = new XCommand(MoveToTomorrow);
+            CommandsInit();
 
         }
 
@@ -31,12 +29,7 @@ namespace StudyAssist.ViewModel
         {
             _problem = problem;
             this.Save = save;
-            LevelUpCommand = new XCommand(StudyLevelUp);
-            ShowAnswerCommand = new XCommand(ShowAnswer);
-            MoveToTomorrowCommand = new XCommand(MoveToTomorrow);
-
-
-
+            CommandsInit();
         }
         #endregion
 
@@ -109,7 +102,29 @@ namespace StudyAssist.ViewModel
             {
                 return Problem.RepeatDate;
             }
+            set
+            {
+                if (value <= DateTime.Today)
+                    throw new ArgumentOutOfRangeException("OutOfRangeDate");
+                else
+                {
+                    Problem.RepeatDate = value;
+                    RaisePropertyChanged(this, "RepeatDate");
+                    RaisePropertyChanged(this, "RepeatDateString");
+                    this.Save();
+                }
+            }
+
         }
+
+        public String RepeatDateString
+        {
+            get
+            {
+                return RepeatDate.ToString("d.MM.yyyy");
+            }
+        }
+
 
         public string RepeatAnswer
         {
@@ -119,8 +134,16 @@ namespace StudyAssist.ViewModel
             }
             set
             {
-                _repeatAnswer = value;
+                Answer = _repeatAnswer = value;
             }
+        }
+
+        public String StudyLevel
+        {
+            get 
+            {
+                return Problem.StudyLevel.ToString();
+             }
         }
 
         #endregion
@@ -132,17 +155,23 @@ namespace StudyAssist.ViewModel
         {
             this.Problem.StudyLevelUp();
             Save();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
         }
 
         public void StudyLevelDown()
         {
             this.Problem.StudyLevelDown();
-            Save(); 
+            Save();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
         }
 
         public void MoveToTomorrow()
         {
             Problem.MoveToTomorrow();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
             Save();
         }
 
@@ -153,11 +182,12 @@ namespace StudyAssist.ViewModel
 
         }
 
-        public void AddToStudy()
+        private void AddToStudy()
         {
             Problem.AddToStudy();
             Save();
-
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
         }
 
         private void ShowAnswer()
@@ -166,16 +196,42 @@ namespace StudyAssist.ViewModel
             RaisePropertyChanged(this, "RepeatAnswer");
         }
 
+        private void LevelDown()
+        {
+            Problem.StudyLevelDown();
+            Save();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
+        }
+
+
+        private void CommandsInit()
+        {
+            LevelUpCommand = new XCommand(StudyLevelUp);
+            LevelDownCommand = new XCommand(StudyLevelDown);
+            ShowAnswerCommand = new XCommand(ShowAnswer);
+            MoveToTomorrowCommand = new XCommand(MoveToTomorrow);
+            AddToStudyCommand = new XCommand(AddToStudy);
+        }
+
+
         #endregion
 
+
+
+        #region commands
+
         public XCommand LevelUpCommand { get; set; }
+
+        public XCommand LevelDownCommand { get; set; }
 
         public XCommand ShowAnswerCommand { get; set; }
 
         public XCommand MoveToTomorrowCommand { get; set; }
 
+        public XCommand AddToStudyCommand { get; set; }
 
-        #region
+
         #endregion
     }
 }

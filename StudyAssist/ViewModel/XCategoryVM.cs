@@ -16,6 +16,9 @@ namespace StudyAssist.ViewModel
         ICategory _category;
         ObservableCollection<XThemeVM> _themesObsColl;
         CollectionViewSource _themesCVS;
+        ObservableCollection<XThemeVM> _themesToRepeatObsColl;
+        CollectionViewSource _themesToRepeatCVS;
+        
 
         #endregion 
 
@@ -59,11 +62,27 @@ namespace StudyAssist.ViewModel
             }
         }
 
+        public ICollectionView ThemesToRepeatCollView
+        {
+            get
+            {
+                return _themesToRepeatCVS.View;
+            }
+        }
+
         public XThemeVM SelectedTheme
         {
             get
             {
                 return ThemesCollView.CurrentItem as XThemeVM;
+            }
+        }
+
+        public XThemeVM SelectedToRepeatTheme
+        {
+            get 
+            {
+                return ThemesToRepeatCollView.CurrentItem as XThemeVM;
             }
         }
 
@@ -82,20 +101,28 @@ namespace StudyAssist.ViewModel
         private void Init()
         {
             _themesObsColl = new ObservableCollection<XThemeVM>();
+            _themesToRepeatObsColl = new ObservableCollection<XThemeVM>();
             foreach(var theme in Category.Themes)
             {
                 XThemeVM th = new XThemeVM(theme, Save);
                 th.Save = this.Save;
                 _themesObsColl.Add(th);
+                if (!th.IsProblemRepeatEmpty)
+                    _themesToRepeatObsColl.Add(th);
             }
             _themesObsColl.CollectionChanged += ThemesObsColl_CollectionChanged;
             _themesCVS = new CollectionViewSource();
             _themesCVS.Source = _themesObsColl;
             _themesCVS.View.CurrentChanged += View_CurrentChanged;
+            _themesToRepeatCVS = new CollectionViewSource();
+            _themesToRepeatCVS.Source = _themesToRepeatObsColl;
+            _themesToRepeatCVS.View.CurrentChanged += ThemesRepeatView_CurrentChanged;
 
          }
 
-         private void Save()
+
+
+        private void Save()
          {
             IStorageItem storItem = ((IStorageItem)this.Category);
             storItem.SaveItem(storItem);
@@ -126,6 +153,10 @@ namespace StudyAssist.ViewModel
             RaisePropertyChanged(this, "SelectedTheme");
         }
 
+        private void ThemesRepeatView_CurrentChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(this, "SelectedToRepeatTheme");
+        }
 
         #endregion
 

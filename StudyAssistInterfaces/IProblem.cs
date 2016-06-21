@@ -12,7 +12,7 @@ namespace StudyAssistInterfaces
 
         DateTime AddingToStudyDate { get; }
 
-        DateTime RepeatDate { get; }
+        DateTime RepeatDate { get; set; }
 
         Byte StudyLevel { get; }
 
@@ -23,5 +23,6 @@ namespace StudyAssistInterfaces
         void MoveToTomorrow();
         void RemoveFromStudy();
         void AddToStudy();
+
     }
 }

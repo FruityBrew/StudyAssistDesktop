@@ -10,6 +10,18 @@
             <Setter Property="BorderBrush" Value="AliceBlue"/>
             <Setter Property="Height" Value="80"></Setter>
             <Setter Property="Width" Value="120"></Setter>
+            <Style.Triggers>
+                <!--Trigger Property="IsPressed" Value="True" >
+                    <Setter Property="Background" Value="Red" ></Setter>
+                </>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"  AutoReverse="True"  To="Red" Duration="0:0:0.5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger-->
+            </Style.Triggers>
         </Style>
 
         <Style x:Name="dw" x:Key="XStyleToTab" TargetType="TabItem">
@@ -42,8 +54,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
 
         <Style x:Key="CellSt" TargetType="DataGridCell">
             <Style.Triggers>

@@ -23,6 +23,8 @@ namespace StudyAssist
     {
         MainViewModel _mainVM;
 
+        
+
         public MainWindow()
         {
             
@@ -31,10 +33,17 @@ namespace StudyAssist
             InitializeComponent();
 
             this.DataContext = _mainVM;
+            //this.XDatePickerSetDate.CalendarOpened += ButtonSetDate_Click;
+        //    this.XButtonSetDate.Click += 
         }
 
 
-        private void ButtonShowAnswer_Click(object sender, RoutedEventArgs e)
+        private void ButtonSetDate_Click(object sender, RoutedEventArgs e)
+        {
+          //  XDatePickerSetDate.CalendarOpened
+        }
+
+        private void DatePickerSetDate_Click(object sender, RoutedEventArgs e)
         {
             
         }

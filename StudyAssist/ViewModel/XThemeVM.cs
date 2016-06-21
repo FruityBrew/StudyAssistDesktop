@@ -155,6 +155,17 @@ namespace StudyAssist.ViewModel
             }
         }
 
+        public Boolean IsProblemRepeatEmpty
+        {
+            get
+            {           
+                if (_problemsToRepeatObsColl.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         #endregion
 
 
