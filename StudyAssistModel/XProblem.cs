@@ -14,8 +14,8 @@ namespace StudyAssistModel
 *   Если пользователь повторил вопрос - он должен повысить его уровень на 1 поз вверх
 *   При этом устанавливается новая дата повторения
 *
-*   При достижении __ уровня вопрос переводится в IsStudy = false;
-*   При этом необходимо предусмотреть возможность отображения архивных вопросов при необходимости
+*   
+*   
 */
     [Serializable]
     public class XProblem : IProblem
@@ -36,6 +36,7 @@ namespace StudyAssistModel
             this._isStudy = false;
             this._addingToStudyDate = DateTime.Today;
             this._creationDate = DateTime.Today;
+            this._repeateDate = DateTime.Today;
             this.StudyLevelUp();
 
         }
@@ -113,8 +114,14 @@ namespace StudyAssistModel
             {
                 return _repeateDate;
             }
+            set
+            {
+                _repeateDate = value;
+            }
 
         }
+
+
 
         #endregion
 
@@ -126,32 +133,59 @@ namespace StudyAssistModel
 
             _studyLevel += 1;
             SpecifyRepeatDate();
+            //if (_studyLevel >= 5)
+            //{
+            //    _studyLevel = 5; // отладка
+            //    IsStudy = true;
+            //}
         }
 
         private void SpecifyRepeatDate()
         {
             switch (_studyLevel)
             {
+                //case 1:
+                //    _repeateDate = DateTime.Today.AddDays(1);
+                //    break;
+                //case 2:
+                //    _repeateDate = DateTime.Today.AddDays(3);
+                //    break;
+                //case 3:
+                //    _repeateDate = DateTime.Today.AddDays(7);
+                //    break;
+                //case 4:
+                //    _repeateDate = DateTime.Today.AddDays(14);
+                //    break;
+                //case 5:
+                //    _repeateDate = DateTime.Today.AddDays(30);
+                //    break;
+                //case 6:
+                //    _repeateDate = DateTime.Today.AddDays(60);
+                //    break;
+                //default:
+                //    _repeateDate = DateTime.Today.AddDays(120);
+                //    break;
+
                 case 1:
-                    _repeateDate = DateTime.Today.AddDays(1);
+                    _repeateDate = _repeateDate.AddDays(1);
                     break;
                 case 2:
-                    _repeateDate = DateTime.Today.AddDays(3);
+                    _repeateDate = _repeateDate.AddDays(3);
                     break;
                 case 3:
-                    _repeateDate = DateTime.Today.AddDays(7);
+                    _repeateDate = _repeateDate.AddDays(7);
                     break;
                 case 4:
-                    _repeateDate = DateTime.Today.AddDays(14);
+                    _repeateDate = _repeateDate.AddDays(14);
                     break;
                 case 5:
-                    _repeateDate = DateTime.Today.AddDays(30);
+                    _repeateDate = _repeateDate.AddDays(30);
                     break;
-                case 6:
-                    _repeateDate = DateTime.Today.AddDays(60);
-                    break;
+                //case 6:
+                //    _repeateDate = _repeateDate.AddDays(45);
+                    //break;
                 default:
-                    _repeateDate = DateTime.Today.AddDays(120);
+                    _repeateDate = _repeateDate.AddDays(45);
                     break;
             }
             
@@ -184,7 +218,13 @@ namespace StudyAssistModel
         {
             _addingToStudyDate = DateTime.Today;
             IsStudy = false;
-            _studyLevel = 0;
+            _studyLevel = 1;
+            SpecifyRepeatDate();
+
+        }
+        public void SetRepeatDate(DateTime repeatDate)
+        {
+            _repeateDate = repeatDate;
         }
         #endregion
 
