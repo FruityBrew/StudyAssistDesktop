@@ -120,5 +120,11 @@ namespace StudyAssistModel
         }
 
         #endregion
+
+
+        public void RemoveFromStudy()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

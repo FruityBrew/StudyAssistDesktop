@@ -7,11 +7,12 @@ namespace StudyAssistInterfaces
     {
         String Name { get; set; }
 
-        Byte StudyLevel { get; set; }
-
         Boolean IsStudy { get; set; }
 
         ObservableCollection<IProblem> Problems { get; }
+
+        void RemoveFromStudy();
+
 
     }
 }

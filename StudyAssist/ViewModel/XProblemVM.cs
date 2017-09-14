@@ -184,7 +184,7 @@ namespace StudyAssist.ViewModel
 
         private void AddToStudy()
         {
-            Problem.AddToStudy();
+            Problem.AddToStudy(0);
             Save();
             RaisePropertyChanged(this, "RepeatDateString");
             RaisePropertyChanged(this, "StudyLevel");

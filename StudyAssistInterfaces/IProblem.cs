@@ -22,7 +22,7 @@ namespace StudyAssistInterfaces
         void StudyLevelDown();
         void MoveToTomorrow();
         void RemoveFromStudy();
-        void AddToStudy();
+        void AddToStudy(byte level);
 
     }
 }

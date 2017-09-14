@@ -8,5 +8,7 @@ namespace StudyAssistInterfaces
         String Name { get; set;}
 
         ObservableCollection<ITheme> Themes { get; }
+
+        void RemoveFromStudy();
     }
 }

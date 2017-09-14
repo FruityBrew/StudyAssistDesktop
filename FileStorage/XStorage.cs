@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 namespace FileStorage
 {
+    /// <summary>
+    /// Хранилище.
+    /// </summary>
     public class XStorage
     {
-        #region fields
+        #region Fields
 
-        static XStorage _instance;
-        readonly DirectoryInfo _dataFolder;
-        Dictionary<IStorageItem, FileInfo> _itemFiles;
+        /// <summary>
+        /// Созданная сущность.
+        /// </summary>
+        private static XStorage _instance;
 
-        #endregion
+        /// <summary>
+        /// Путь папки для хранения файлов категорий.
+        /// </summary>
+        private readonly DirectoryInfo _dataFolder;
+
+        /// <summary>
+        /// Словарь элементов и файлов.
+        /// </summary>
+        private Dictionary<IStorageItem, FileInfo> _itemFiles;
+
+        #endregion Fields
 
         #region ctors
         static XStorage()
@@ -24,7 +38,8 @@ namespace FileStorage
 
         private XStorage()
         {
-            _dataFolder = new DirectoryInfo(".").CreateSubdirectory("CategoriesStorage");
+            _dataFolder = 
+                new DirectoryInfo(".").CreateSubdirectory("CategoriesStorage");
             _itemFiles = new Dictionary<IStorageItem, FileInfo>();
         }
 

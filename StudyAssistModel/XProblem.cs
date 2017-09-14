@@ -114,6 +114,11 @@ namespace StudyAssistModel
                 return _repeateDate;
             }
 
+            set
+            {
+                _repeateDate = value;
+            }
+
         }
 
         #endregion
@@ -180,13 +185,14 @@ namespace StudyAssistModel
             _isStudy = true;
         }
 
-        public void AddToStudy()
+        public void AddToStudy(byte level)
         {
             _addingToStudyDate = DateTime.Today;
             IsStudy = false;
-            _studyLevel = 0;
+            _studyLevel = level;
         }
         #endregion
+
 
     }
 }

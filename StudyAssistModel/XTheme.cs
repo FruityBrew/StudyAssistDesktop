@@ -13,7 +13,7 @@ namespace StudyAssistModel
         DateTime _dateCreation;
         DateTime _dateRepeat;
         String _name;
-        Byte _studyLevel;
+
         Boolean _isStudy;
         ObservableCollection<IProblem> _problems;
 
@@ -95,20 +95,10 @@ namespace StudyAssistModel
         }
 
 
-
-        public Byte StudyLevel
+        public void RemoveFromStudy()
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            throw new NotImplementedException();
         }
-
         #endregion
 
 
