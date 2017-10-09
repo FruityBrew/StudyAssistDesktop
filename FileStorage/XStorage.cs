@@ -56,6 +56,10 @@ namespace FileStorage
 
         #region methods
 
+        /// <summary>
+        /// Загружает хранимые записи.
+        /// </summary>
+        /// <returns>Последовательность хранимых записей.</returns>
         public IEnumerable<IStorageItem> LoadItems()
         {
             var items = new List<IStorageItem>();
@@ -68,6 +72,11 @@ namespace FileStorage
             return items;
         }
 
+        /// <summary>
+        /// Загружает хранимую запись.
+        /// </summary>
+        /// <param name="finfo">Файл с записью.</param>
+        /// <returns>Хранимая запись.</returns>
         private IStorageItem LoadItem(FileInfo finfo)
         {
             IStorageItem item;
@@ -86,6 +95,10 @@ namespace FileStorage
             return item;
         }
 
+        /// <summary>
+        /// Сохраняет запись в хранилище.
+        /// </summary>
+        /// <param name="item">Запись.</param>
         public void SaveItem(IStorageItem item)
         {
             FileInfo finfo;
@@ -110,6 +123,10 @@ namespace FileStorage
            }
         }
 
+        /// <summary>
+        /// Удаляет запись из хранилища.
+        /// </summary>
+        /// <param name="item">Удаляемая запись.</param>
         public void DeleteItem(IStorageItem item)
         {
             FileInfo finfo;
@@ -120,10 +137,14 @@ namespace FileStorage
             }
             else
             {
-                throw new ArgumentException("Нельзя найти файл удаляемого аргумента Item");
+                throw new ArgumentException(
+                    "Нельзя найти файл удаляемого аргумента Item");
             }
         }
 
+        /// <summary>
+        /// Сохраняет изменения.
+        /// </summary>
         public void SaveChange()
         {
             Parallel.ForEach(_itemFiles, item => SaveItem(item.Key));
