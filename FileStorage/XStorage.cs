@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace FileStorage
 {
     /// <summary>
-    /// Хранилище.
+    /// Хранилище записей.
     /// </summary>
     public class XStorage
     {
@@ -30,7 +30,8 @@ namespace FileStorage
 
         #endregion Fields
 
-        #region ctors
+        #region Сtors
+
         static XStorage()
         {
             _instance = new XStorage();
@@ -43,18 +44,18 @@ namespace FileStorage
             _itemFiles = new Dictionary<IStorageItem, FileInfo>();
         }
 
-        #endregion
+        #endregion Ctors
 
-        #region properties
+        #region Properties
 
         public static XStorage Instance
         {
             get { return _instance; }
         }
 
-        #endregion
+        #endregion Properties
 
-        #region methods
+        #region Methods
 
         /// <summary>
         /// Загружает хранимые записи.
@@ -73,29 +74,6 @@ namespace FileStorage
         }
 
         /// <summary>
-        /// Загружает хранимую запись.
-        /// </summary>
-        /// <param name="finfo">Файл с записью.</param>
-        /// <returns>Хранимая запись.</returns>
-        private IStorageItem LoadItem(FileInfo finfo)
-        {
-            IStorageItem item;
-            var bformatter = new BinaryFormatter();
-
-            using (var fstream = finfo.OpenRead())
-            {
-                var obj = bformatter.Deserialize(fstream);
-               
-                item = (IStorageItem)obj;
-                item.SaveItem = SaveItem;
-                item.DeleteItem = DeleteItem;
-            }
-
-            _itemFiles[item] = finfo;
-            return item;
-        }
-
-        /// <summary>
         /// Сохраняет запись в хранилище.
         /// </summary>
         /// <param name="item">Запись.</param>
@@ -103,24 +81,24 @@ namespace FileStorage
         {
             FileInfo finfo;
 
-           if( !_itemFiles.TryGetValue(item, out finfo))
-           {
+            if (!_itemFiles.TryGetValue(item, out finfo))
+            {
                 finfo = GenerateNewFileName();
-           }
+            }
 
-           try
-           {
+            try
+            {
                 var bformatter = new BinaryFormatter();
                 using (var fstream = finfo.OpenWrite())
                 {
                     bformatter.Serialize(fstream, item);
                 }
-           }
-           //TODO
-           catch (Exception ex)
-           {
-                
-           }
+            }
+            //TODO
+            catch (Exception ex)
+            {
+
+            }
         }
 
         /// <summary>
@@ -130,7 +108,7 @@ namespace FileStorage
         public void DeleteItem(IStorageItem item)
         {
             FileInfo finfo;
-            if(_itemFiles.TryGetValue(item, out finfo))
+            if (_itemFiles.TryGetValue(item, out finfo))
             {
                 finfo.Delete();
                 _itemFiles.Remove(item);
@@ -163,6 +141,34 @@ namespace FileStorage
 
             return finfo;
         } 
-        #endregion
+
+        #endregion Methods
+
+        #region Utilities
+
+        /// <summary>
+        /// Загружает хранимую запись.
+        /// </summary>
+        /// <param name="finfo">Файл с записью.</param>
+        /// <returns>Хранимая запись.</returns>
+        private IStorageItem LoadItem(FileInfo finfo)
+        {
+            IStorageItem item;
+            var bformatter = new BinaryFormatter();
+
+            using (var fstream = finfo.OpenRead())
+            {
+                var obj = bformatter.Deserialize(fstream);
+               
+                item = (IStorageItem)obj;
+                item.SaveItem = SaveItem;
+                item.DeleteItem = DeleteItem;
+            }
+
+            _itemFiles[item] = finfo;
+            return item;
+        }
+
+        #endregion Utilities
     }
 }

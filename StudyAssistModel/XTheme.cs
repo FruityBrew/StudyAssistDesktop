@@ -10,8 +10,8 @@ namespace StudyAssistModel
 
         #region fields
 
-        DateTime _dateCreation;
-        DateTime _dateRepeat;
+        private DateTime _createDate;
+        DateTime _repeatDate;
         String _name;
 
         Boolean _isStudy;
@@ -35,12 +35,12 @@ namespace StudyAssistModel
         {
             get
             {
-                return _dateCreation;
+                return _createDate;
             }
 
             set
             {
-                _dateCreation = value;
+                _createDate = value;
             }
         }
 
@@ -48,12 +48,12 @@ namespace StudyAssistModel
         {
             get
             {
-                return _dateRepeat;
+                return _repeatDate;
             }
 
             set
             {
-                _dateRepeat = value;
+                _repeatDate = value;
             }
         }
 
