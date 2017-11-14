@@ -8,7 +8,7 @@ namespace StudyAssistModel
     public class XTheme : ITheme 
     {
 
-        #region fields
+        #region fields   
 
         private DateTime _createDate;
         DateTime _repeatDate;
