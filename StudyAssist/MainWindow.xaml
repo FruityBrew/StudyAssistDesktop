@@ -171,6 +171,26 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
+
+            <TabItem x:Name="XTabItemSettings" Header="Настройки" Style="{StaticResource XStyleToTab}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>  
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource XStyleToButton}" Width="Auto" Grid.Row="1" Grid.Column="1" Content="Снять всё с обучения"/>
+                </Grid>
+                    
+
+                
+            </TabItem>
         </TabControl>
 
     </Grid>
