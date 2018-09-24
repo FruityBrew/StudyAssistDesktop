@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudyAssist"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="1000">
+        Title="MainWindow" Height="750" Width="1000"
+        d:DataContext="MainViewModel">
     <Grid>
         <TabControl x:Name="XTabControl" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Stretch" Background="AliceBlue" >
             <TabItem x:Name="XTabItemAll" Header="Всё" Style="{StaticResource XStyleToTab}">
@@ -185,7 +186,10 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Style="{StaticResource XStyleToButton}" Width="Auto" Grid.Row="1" Grid.Column="1" Content="Снять всё с обучения"/>
+                    <Button Style="{StaticResource XStyleToButton}" 
+                            Width="Auto" Grid.Row="1" Grid.Column="1" 
+                            Content="Снять всё с обучения"
+                            Command="{Binding RemoveAllFromStudy}"/>
                 </Grid>
                     
 

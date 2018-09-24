@@ -5,6 +5,7 @@ using Ninject;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 using System.ComponentModel;
+using System.Linq;
 
 namespace StudyAssist.ViewModel
 {
@@ -35,13 +36,40 @@ namespace StudyAssist.ViewModel
             _categoriesCVS = new CollectionViewSource();
             _categoriesCVS.Source = _categoriesObsColl;
             _categoriesCVS.View.CurrentChanged += View_CurrentChanged;
+
+            RemoveAllFromStudy = new XCommand(_RemoveAllFromStudy);
         }
 
 
         #endregion
 
+        #region Utilities
+
+        private void _RemoveAllFromStudy()
+        {
+            if(_categoriesObsColl?.Any() == false)
+                return;
+
+            foreach (ICategory category in _categoriesObsColl)
+            {
+                foreach (ITheme theme in category.Themes)
+                {
+                    foreach (IProblem problem in theme.Problems)
+                    {
+                        problem.IsStudy = false;
+                        problem.RepeatDate =
+                    }
+                }
+            }
+        }
+
+        #endregion Utilities
+
+
 
         #region properties
+
+        public XCommand RemoveAllFromStudy { get; set; }
 
         public ICollectionView CategoriesCollView
             {
