@@ -45,7 +45,7 @@ namespace StudyAssist.ViewModel
             {
                 XProblemVM prob = new XProblemVM(problem, Save);
                 _problemsObsColl.Add(prob);
-                if (prob.RepeatDate <= DateTime.Today && !prob.IsStudy)
+                if (prob.RepeatDate <= DateTime.Today && prob.IsStudy)
                     _problemsToRepeatObsColl.Add(prob);
             }
             _problemsObsColl.CollectionChanged += ProblemsObsColl_CollectionChanged;

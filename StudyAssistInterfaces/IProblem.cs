@@ -10,12 +10,17 @@ namespace StudyAssistInterfaces
         DateTime CreationDate
         { get; }
 
-        DateTime AddingToStudyDate { get; }
+        DateTime? AddedToStudyDate { get; }
 
-        DateTime RepeatDate { get; set; }
+        DateTime? RepeatDate { get; set; }
 
-        Byte StudyLevel { get; }
+        Byte StudyLevel { get; set; }
 
+        Boolean IsAutoRepeate { get; set; }
+
+        /// <summary>
+        /// Находится ли проблема на изучении.
+        /// </summary>
         Boolean IsStudy { get; set; }
 
         void StudyLevelUp();
@@ -23,6 +28,11 @@ namespace StudyAssistInterfaces
         void MoveToTomorrow();
         void RemoveFromStudy();
         void AddToStudy(byte level);
+        void AddToStudy(DateTime? repeateDate);
+
+        void SetRepeateDate(DateTime? repeateDate);
+
+        void ResetLevel();
 
     }
 }

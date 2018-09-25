@@ -57,7 +57,7 @@ namespace StudyAssist.ViewModel
                     foreach (IProblem problem in theme.Problems)
                     {
                         problem.IsStudy = false;
-                        problem.RepeatDate =
+                        problem.RepeatDate = null;
                     }
                 }
             }

@@ -79,8 +79,21 @@ namespace StudyAssist.ViewModel
             {
                 Problem.IsStudy = value;
                 Save();
+                RaisePropertyChanged(this, "IsStudy");
             }
 
+        }
+
+        public Boolean IsAutoRepeate
+        {
+            get { return Problem.IsAutoRepeate; }
+            set
+            {
+                Problem.IsAutoRepeate = value;
+                Save();
+                RaisePropertyChanged(this, "IsAutoRepeate");
+            }
+            
         }
 
         public Action Save
@@ -96,7 +109,7 @@ namespace StudyAssist.ViewModel
             }
         }
 
-        public DateTime RepeatDate
+        public DateTime? RepeatDate
         {
             get
             {
@@ -104,7 +117,8 @@ namespace StudyAssist.ViewModel
             }
             set
             {
-                if (value <= DateTime.Today)
+
+                if (value.HasValue && value <= DateTime.Today)
                     throw new ArgumentOutOfRangeException("OutOfRangeDate");
                 else
                 {
@@ -121,7 +135,10 @@ namespace StudyAssist.ViewModel
         {
             get
             {
-                return RepeatDate.ToString("d.MM.yyyy");
+                if(RepeatDate.HasValue == false)
+                    return String.Empty;
+
+                return RepeatDate.Value.ToString("d.MM.yyyy");
             }
         }
 
@@ -179,29 +196,27 @@ namespace StudyAssist.ViewModel
         {
             this.Problem.RemoveFromStudy();
             Save();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
+            RaisePropertyChanged(this, "IsStudy");
+            RaisePropertyChanged(this, "RepeatDate");
 
         }
 
         private void AddToStudy()
         {
-            Problem.AddToStudy(0);
+            Problem.AddToStudy(1);
             Save();
             RaisePropertyChanged(this, "RepeatDateString");
             RaisePropertyChanged(this, "StudyLevel");
+            RaisePropertyChanged(this, "IsStudy");
+            RaisePropertyChanged(this, "RepeatDate");
         }
 
         private void ShowAnswer()
         {
             _repeatAnswer = Problem.Answer;
             RaisePropertyChanged(this, "RepeatAnswer");
-        }
-
-        private void LevelDown()
-        {
-            Problem.StudyLevelDown();
-            Save();
-            RaisePropertyChanged(this, "RepeatDateString");
-            RaisePropertyChanged(this, "StudyLevel");
         }
 
 
@@ -212,6 +227,7 @@ namespace StudyAssist.ViewModel
             ShowAnswerCommand = new XCommand(ShowAnswer);
             MoveToTomorrowCommand = new XCommand(MoveToTomorrow);
             AddToStudyCommand = new XCommand(AddToStudy);
+            RemoveFromStudyCommand = new XCommand(RemoveFromStudy);
         }
 
 
@@ -231,6 +247,7 @@ namespace StudyAssist.ViewModel
 
         public XCommand AddToStudyCommand { get; set; }
 
+        public XCommand RemoveFromStudyCommand { get; set; }
 
         #endregion
     }

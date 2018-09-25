@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="1000"
         d:DataContext="MainViewModel">
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:BooleanInvertor x:Key="BooleanInvertor"></local:BooleanInvertor>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <TabControl x:Name="XTabControl" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Stretch" Background="AliceBlue" >
             <TabItem x:Name="XTabItemAll" Header="Всё" Style="{StaticResource XStyleToTab}">
@@ -53,7 +58,7 @@
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition Height="100"></RowDefinition>
@@ -68,18 +73,80 @@
                             <Label Content="Дата повтора:" FontSize="16" VerticalAlignment="Center" ></Label>
                             <Label Content="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RepeatDateString}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <!--Button Content="Повысить уровень" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.LevelUpCommand}" Margin="3"/-->
+                        <!--<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Повысить уровень" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.LevelUpCommand}" Margin="3"/>
                             <Button x:Name="XButtonSetDate" Style="{StaticResource XStyleToButton}"  Margin="3" Click="ButtonSetDate_Click">
                                 <DatePicker x:Name="XDatePickerSetDate" BorderBrush="LightSteelBlue" CalendarOpened="DatePickerSetDate_Click" SelectedDate="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RepeatDate}"/>
                             </Button>
-                            <!--StackPanel Orientation="Vertical" VerticalAlignment="Center" Background="LightSteelBlue" Margin="3">
+                            --><!--StackPanel Orientation="Vertical" VerticalAlignment="Center" Background="LightSteelBlue" Margin="3">
                                 <Label Background="LightSteelBlue" />
                                 <DatePicker VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"  />
                                 <Label Background="LightSteelBlue" />
                             </-->
-                            <Button Content="Повторить с нуля" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.AddToStudyCommand}" Margin="3"/>
-                        </StackPanel>
+                            <!--<Button Content="Повторить с нуля" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.AddToStudyCommand}" Margin="3"/>--><!--
+                        </StackPanel>-->
+                        <Button   Style="{StaticResource XStyleToButton}"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Content="Добавить к изучению"
+                                 Height="25"
+                                  IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsStudy, Converter={StaticResource BooleanInvertor} }"
+                                  Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.AddToStudyCommand}"
+                        >
+
+
+                        </Button>
+                        <Grid Grid.Row="3" IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsStudy}" >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                                <CheckBox Content="Использовать автоповорение" 
+                                          IsChecked="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
+                                    
+                                </CheckBox>
+
+                                <StackPanel IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate, Converter={StaticResource BooleanInvertor}}">
+                                    <Label Margin="0,5">Выбрать дату повторения:</Label>
+                                    <DatePicker Margin="0,5" x:Name="XDatePickerSetDate" BorderBrush="LightSteelBlue"  SelectedDate="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RepeatDate}"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                            <StackPanel 
+                                        Grid.Column="1" 
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center">
+                                <Button Content="Снять с обучения"
+                                        Margin="3" 
+                                        Height="Auto" 
+                                        Style="{StaticResource XStyleToButton}"
+                                        Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RemoveFromStudyCommand}">
+                                </Button>
+                                <Button 
+                                    Content="Повысить уровень" 
+                                    Margin="3"  
+                                    Height="Auto" 
+                                    Style="{StaticResource XStyleToButton}"
+                                    Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand}">
+                                    
+                                </Button>
+                                <Button 
+                                    Content="Понизить уровень" 
+                                    Margin="3"  
+                                    Height="Auto" 
+                                    Style="{StaticResource XStyleToButton}"
+                                    Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelDownCommand}">
+                                    
+                                </Button>
+
+
+                            </StackPanel>
+                        </Grid>
+
+
                     </Grid>
 
                     <DataGrid x:Name="XDataGridProblems_All" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedCategory.SelectedTheme.ProblemsCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >

@@ -24,32 +24,15 @@ namespace StudyAssistModel
     [Serializable]
     public class XProblem : IProblem
     {
-        #region Fields
-
-        private String _answer;
-
-        private String _question;
-
-        private Boolean _isStudy;
-
-        private readonly DateTime _creationDate;
-
-        private DateTime _addedToStudyDate;
-
-        private DateTime _repeateDate;
-
-        private Byte _studyLevel;
-
-        #endregion Fields
-
         #region Constructors
 
         public XProblem()
         {
-            this._isStudy = false;
-            this._addedToStudyDate = DateTime.MinValue;
-            this._creationDate = DateTime.Today;
-            this._repeateDate = DateTime.MaxValue;
+            this.IsStudy = true;
+            IsAutoRepeate = true;
+            this.AddedToStudyDate = DateTime.Today;
+            this.CreationDate = DateTime.Today;
+            this.RepeatDate = null;
             this.StudyLevelUp();
         }
 
@@ -57,65 +40,42 @@ namespace StudyAssistModel
 
         #region Properties
 
+        public Boolean IsAutoRepeate { get; set; }
+
         /// <summary>
         /// Объяснение проблемы (вопроса).
         /// </summary>
-        public String Answer
-        {
-            get { return _answer; }
-            set { _answer = value; }
-        }
+        public String Answer { get; set; }
 
         /// <summary>
-        /// Признак того, окончательно ли изучена проблема.
+        /// Находится ли проблема на изучении
         /// </summary>
-        public Boolean IsStudy
-        {
-            get { return _isStudy; }
-            set { _isStudy = value; }
-        }
+        public Boolean IsStudy { get; set; }
 
         /// <summary>
         /// Формулировка проблемы (вопроса).
         /// </summary>
-        public String Question
-        {
-            get { return _question; }
-            set { _question = value; }
-        }
+        public String Question { get; set; }
 
         /// <summary>
         /// Уровень изученности.
         /// </summary>
-        public byte StudyLevel
-        {
-            get { return _studyLevel; }
-        }
+        public byte StudyLevel { get; set; }
 
         /// <summary>
         /// Дата создания записи.
         /// </summary>
-        public DateTime CreationDate
-        {
-            get { return _creationDate; }
-        }
+        public DateTime CreationDate { get; set; }
 
         /// <summary>
         /// Дата добавления проблемы на изучение.
         /// </summary>
-        public DateTime AddToStudyDate
-        {
-            get { return _addedToStudyDate; }
-        }
+        public DateTime? AddedToStudyDate { get; set; }
 
         /// <summary>
         /// Дата следующего повторения вопроса.
         /// </summary>
-        public DateTime RepeatDate
-        {
-            get { return _repeateDate; }
-            set { _repeateDate = value; }
-        }
+        public DateTime? RepeatDate { get; set; }
 
         #endregion Properties
         
@@ -126,10 +86,10 @@ namespace StudyAssistModel
         /// </summary>
         public void StudyLevelUp()
         {
-            if (IsStudy) 
+            if (IsStudy == false) 
                 return;
 
-            _studyLevel += 1;
+            StudyLevel += 1;
             _SpecifyRepeatDate();
         }
 
@@ -138,10 +98,10 @@ namespace StudyAssistModel
         /// </summary>
         public void StudyLevelDown()
         {
-            if (_studyLevel <= 1)
+            if (IsStudy == false || StudyLevel <= 1)
                 return;
 
-            _studyLevel -= 1;
+            StudyLevel -= 1;
 
             _SpecifyRepeatDate();
         }
@@ -151,15 +111,36 @@ namespace StudyAssistModel
         /// </summary>
         public void MoveToTomorrow()
         {
-            _repeateDate = DateTime.Today.AddDays(1);
+            RepeatDate = DateTime.Today.AddDays(1);
         }
 
-        /// <summary>
-        /// Помечает проблему как изученную.
-        /// </summary>
         public void RemoveFromStudy()
         {
-            _isStudy = true;
+            IsStudy = false;
+            RepeatDate = null;
+        }
+
+        public void ResetLevel()
+        {
+            StudyLevel = 0;
+        }
+
+        public void AddToStudy(DateTime? repeateDate)
+        {
+            if(repeateDate.HasValue == false)
+                throw new ArgumentNullException(nameof(repeateDate));
+
+            IsAutoRepeate = false;
+            IsStudy = true;
+            RepeatDate = repeateDate;
+        }
+
+        public void SetRepeateDate(DateTime? repeateDate)
+        {
+            if (repeateDate.HasValue == false)
+                throw new ArgumentNullException(nameof(repeateDate));
+
+            RepeatDate = repeateDate;
         }
 
         /// <summary>
@@ -168,20 +149,10 @@ namespace StudyAssistModel
         /// <param name="level">Уровень изученности.</param>
         public void AddToStudy(byte level)
         {
-            _addedToStudyDate = DateTime.Today;
-            IsStudy = false;
-            _studyLevel = level;
+            AddedToStudyDate = DateTime.Today;
+            IsStudy = true;
+            StudyLevel = level;
             _SpecifyRepeatDate();
-        }
-
-        /// <summary>
-        /// Установить дату повторения.
-        /// </summary>
-        /// <param name="repeatDate">Дата повторенияю.</param>
-        public void SetRepeatDate(DateTime repeatDate)
-        {
-            _repeateDate = repeatDate;
-            _studyLevel = 1;
         }
 
         #endregion Methods
@@ -193,7 +164,16 @@ namespace StudyAssistModel
         /// </summary>
         private void _SpecifyRepeatDate()
         {
-            switch (_studyLevel)
+            if(IsStudy == false)
+                return;
+
+            if(StudyLevel == 0)
+                return;
+
+            if (RepeatDate == null)
+                RepeatDate = DateTime.Today;
+
+            switch (StudyLevel)
             {
                 //case 1:
                 //    _repeateDate = DateTime.Today.AddDays(1);
@@ -218,25 +198,25 @@ namespace StudyAssistModel
                 //    break;
 
                 case 1:
-                    _repeateDate = _repeateDate.AddDays(1);
+                    RepeatDate = RepeatDate?.AddDays(1);
                     break;
                 case 2:
-                    _repeateDate = _repeateDate.AddDays(3);
+                    RepeatDate = RepeatDate?.AddDays(3);
                     break;
                 case 3:
-                    _repeateDate = _repeateDate.AddDays(7);
+                    RepeatDate = RepeatDate?.AddDays(7);
                     break;
                 case 4:
-                    _repeateDate = _repeateDate.AddDays(14);
+                    RepeatDate = RepeatDate?.AddDays(14);
                     break;
                 case 5:
-                    _repeateDate = _repeateDate.AddDays(30);
+                    RepeatDate = RepeatDate?.AddDays(30);
                     break;
                 //case 6:
                 //    _repeateDate = _repeateDate.AddDays(45);
                 //break;
                 default:
-                    _repeateDate = _repeateDate.AddDays(45);
+                    RepeatDate = RepeatDate?.AddDays(45);
                     break;
             }
         }
