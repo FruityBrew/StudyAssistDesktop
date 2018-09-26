@@ -50,14 +50,13 @@ namespace StudyAssist.ViewModel
             if(_categoriesObsColl?.Any() == false)
                 return;
 
-            foreach (ICategory category in _categoriesObsColl)
+            foreach (XCategoryVM category in _categoriesObsColl)
             {
-                foreach (ITheme theme in category.Themes)
+                foreach (XThemeVM theme in category.ThemesCollView.SourceCollection)
                 {
-                    foreach (IProblem problem in theme.Problems)
+                    foreach (XProblemVM problem in theme.ProblemsObsColl)
                     {
-                        problem.IsStudy = false;
-                        problem.RepeatDate = null;
+                        problem.RemoveFromStudy();
                     }
                 }
             }

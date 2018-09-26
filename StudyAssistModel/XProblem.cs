@@ -164,6 +164,9 @@ namespace StudyAssistModel
         /// </summary>
         private void _SpecifyRepeatDate()
         {
+            if(IsAutoRepeate == false)
+                return;
+
             if(IsStudy == false)
                 return;
 
@@ -175,41 +178,29 @@ namespace StudyAssistModel
 
             switch (StudyLevel)
             {
-                //case 1:
-                //    _repeateDate = DateTime.Today.AddDays(1);
-                //    break;
-                //case 2:
-                //    _repeateDate = DateTime.Today.AddDays(3);
-                //    break;
-                //case 3:
-                //    _repeateDate = DateTime.Today.AddDays(7);
-                //    break;
-                //case 4:
-                //    _repeateDate = DateTime.Today.AddDays(14);
-                //    break;
-                //case 5:
-                //    _repeateDate = DateTime.Today.AddDays(30);
-                //    break;
-                //case 6:
-                //    _repeateDate = DateTime.Today.AddDays(60);
-                //    break;
-                //default:
-                //    _repeateDate = DateTime.Today.AddDays(120);
-                //    break;
-
                 case 1:
+                    if(RepeatDate > DateTime.Today)
+                        break;
                     RepeatDate = RepeatDate?.AddDays(1);
                     break;
                 case 2:
+                    if (RepeatDate > DateTime.Today)
+                        break;
                     RepeatDate = RepeatDate?.AddDays(3);
                     break;
                 case 3:
+                    if (RepeatDate > DateTime.Today)
+                        break;
                     RepeatDate = RepeatDate?.AddDays(7);
                     break;
                 case 4:
+                    if (RepeatDate > DateTime.Today)
+                        break;
                     RepeatDate = RepeatDate?.AddDays(14);
                     break;
                 case 5:
+                    if (RepeatDate > DateTime.Today)
+                        break;
                     RepeatDate = RepeatDate?.AddDays(30);
                     break;
                 //case 6:

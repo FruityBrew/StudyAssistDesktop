@@ -90,10 +90,15 @@ namespace StudyAssist.ViewModel
             set
             {
                 Problem.IsAutoRepeate = value;
+                Problem.AddToStudy(Problem.StudyLevel);
                 Save();
+
                 RaisePropertyChanged(this, "IsAutoRepeate");
+                RaisePropertyChanged(this, "StudyLevel");
+                RaisePropertyChanged(this, "RepeatDate");
+                RaisePropertyChanged(this, "RepeatDateString");
             }
-            
+
         }
 
         public Action Save
@@ -118,15 +123,15 @@ namespace StudyAssist.ViewModel
             set
             {
 
-                if (value.HasValue && value <= DateTime.Today)
-                    throw new ArgumentOutOfRangeException("OutOfRangeDate");
-                else
-                {
+                //if (value.HasValue && value <= DateTime.Today)
+                //    throw new ArgumentOutOfRangeException("OutOfRangeDate");
+                //else
+                //{
                     Problem.RepeatDate = value;
                     RaisePropertyChanged(this, "RepeatDate");
                     RaisePropertyChanged(this, "RepeatDateString");
                     this.Save();
-                }
+                //}
             }
 
         }
@@ -195,6 +200,7 @@ namespace StudyAssist.ViewModel
         public void RemoveFromStudy()
         {
             this.Problem.RemoveFromStudy();
+            Problem.ResetLevel();
             Save();
             RaisePropertyChanged(this, "RepeatDateString");
             RaisePropertyChanged(this, "StudyLevel");

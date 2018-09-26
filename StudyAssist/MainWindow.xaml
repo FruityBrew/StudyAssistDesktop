@@ -223,9 +223,23 @@
                         </StackPanel>
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Content="Показать ответ" Style="{StaticResource XStyleToButton}" Margin="3" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.ShowAnswerCommand}" />
-                            <Button Content="Зачесть" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand}" Margin="3"></Button>
+                            <Button 
+                                Content="Зачесть" 
+                                Style="{StaticResource XStyleToButton}" 
+                                Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand}" 
+                                Margin="3"
+                                IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
+                            </Button>
+                            <DatePicker
+                                Margin="5,5" 
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                BorderBrush="LightSteelBlue"  
+                                SelectedDate="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RepeatDate, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate, Converter={StaticResource BooleanInvertor}}"/>
                             <!--Button Content="Отложить на завтра" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.MoveToTomorrowCommand}" Margin="3"/-->
-                            <Button Content="" Style="{StaticResource XStyleToButton}"  Margin="3"/>
+                            <!--<Button Content="" Style="{StaticResource XStyleToButton}"  Margin="3"/>-->
+                            
                         </StackPanel>
                     </Grid>
                     <DataGrid x:Name="XDataGridProblems" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedCategory.SelectedToRepeatTheme.ProblemsToRepeatView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >
