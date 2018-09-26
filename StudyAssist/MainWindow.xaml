@@ -125,7 +125,7 @@
                                         Style="{StaticResource XStyleToButton}"
                                         Command="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RemoveFromStudyCommand}">
                                 </Button>
-                                <Button 
+                                <!--<Button 
                                     Content="Повысить уровень" 
                                     Margin="3"  
                                     Height="Auto" 
@@ -140,7 +140,7 @@
                                     Style="{StaticResource XStyleToButton}"
                                     Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelDownCommand}">
                                     
-                                </Button>
+                                </Button>-->
 
 
                             </StackPanel>

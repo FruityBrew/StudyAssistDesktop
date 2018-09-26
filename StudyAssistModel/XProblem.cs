@@ -24,6 +24,22 @@ namespace StudyAssistModel
     [Serializable]
     public class XProblem : IProblem
     {
+        private string _answer;
+
+        private bool _isStudy;
+
+        private string _question;
+
+        private byte _studyLevel;
+
+        private DateTime _creationDate;
+
+        private DateTime? _addedToStudyDate;
+
+        private DateTime? _repeatDate;
+
+        private bool _isAutoRepeate;
+
         #region Constructors
 
         public XProblem()
@@ -40,42 +56,74 @@ namespace StudyAssistModel
 
         #region Properties
 
-        public Boolean IsAutoRepeate { get; set; }
+        public Boolean IsAutoRepeate
+        {
+            get { return _isAutoRepeate; }
+            set { _isAutoRepeate = value; }
+        }
 
         /// <summary>
         /// Объяснение проблемы (вопроса).
         /// </summary>
-        public String Answer { get; set; }
+        public String Answer
+        {
+            get { return _answer; }
+            set { _answer = value; }
+        }
 
         /// <summary>
         /// Находится ли проблема на изучении
         /// </summary>
-        public Boolean IsStudy { get; set; }
+        public Boolean IsStudy
+        {
+            get { return _isStudy; }
+            set { _isStudy = value; }
+        }
 
         /// <summary>
         /// Формулировка проблемы (вопроса).
         /// </summary>
-        public String Question { get; set; }
+        public String Question
+        {
+            get { return _question; }
+            set { _question = value; }
+        }
 
         /// <summary>
         /// Уровень изученности.
         /// </summary>
-        public byte StudyLevel { get; set; }
+        public byte StudyLevel
+        {
+            get { return _studyLevel; }
+            set { _studyLevel = value; }
+        }
 
         /// <summary>
         /// Дата создания записи.
         /// </summary>
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate
+        {
+            get { return _creationDate; }
+            set { _creationDate = value; }
+        }
 
         /// <summary>
         /// Дата добавления проблемы на изучение.
         /// </summary>
-        public DateTime? AddedToStudyDate { get; set; }
+        public DateTime? AddedToStudyDate
+        {
+            get { return _addedToStudyDate; }
+            set { _addedToStudyDate = value; }
+        }
 
         /// <summary>
         /// Дата следующего повторения вопроса.
         /// </summary>
-        public DateTime? RepeatDate { get; set; }
+        public DateTime? RepeatDate
+        {
+            get { return _repeatDate; }
+            set { _repeatDate = value; }
+        }
 
         #endregion Properties
         
