@@ -270,7 +270,8 @@
                     <Button Style="{StaticResource XStyleToButton}" 
                             Width="Auto" Grid.Row="1" Grid.Column="1" 
                             Content="Снять всё с обучения"
-                            Command="{Binding RemoveAllFromStudy}"/>
+                            Command="{Binding RemoveAllFromStudy}"
+                            Height="30" />
                 </Grid>
                     
 
