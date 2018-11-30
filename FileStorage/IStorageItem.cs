@@ -3,7 +3,7 @@
 namespace FileStorage
 {
     /// <summary>
-    /// Интерфейс сохраняемой записи.
+    /// Интерфейс хранимой записи.
     /// </summary>
     public interface IStorageItem
     {

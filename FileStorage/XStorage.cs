@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace FileStorage
 {
     /// <summary>
-    /// Хранилище записей.
+    /// Хранилище записей (синглтон).
     /// </summary>
     public class XStorage
     {
@@ -16,7 +17,7 @@ namespace FileStorage
         /// <summary>
         /// Созданная сущность.
         /// </summary>
-        private static XStorage _instance;
+        private static readonly XStorage _instance;
 
         /// <summary>
         /// Путь папки для хранения файлов категорий.
@@ -26,21 +27,28 @@ namespace FileStorage
         /// <summary>
         /// Словарь элементов и файлов.
         /// </summary>
-        private Dictionary<IStorageItem, FileInfo> _itemFiles;
+        private readonly Dictionary<IStorageItem, FileInfo> _itemFiles;
 
         #endregion Fields
 
         #region Сtors
 
+        /// <summary>
+        /// Статический конструктор.
+        /// </summary>
         static XStorage()
         {
             _instance = new XStorage();
         }
 
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
         private XStorage()
         {
-            _dataFolder = 
-                new DirectoryInfo(".").CreateSubdirectory("CategoriesStorage");
+            _dataFolder = new DirectoryInfo(".")
+                .CreateSubdirectory("CategoriesStorage");
+
             _itemFiles = new Dictionary<IStorageItem, FileInfo>();
         }
 
@@ -48,6 +56,9 @@ namespace FileStorage
 
         #region Properties
 
+        /// <summary>
+        /// Возвращает сущность.
+        /// </summary>
         public static XStorage Instance
         {
             get { return _instance; }
@@ -63,14 +74,9 @@ namespace FileStorage
         /// <returns>Последовательность хранимых записей.</returns>
         public IEnumerable<IStorageItem> LoadItems()
         {
-            var items = new List<IStorageItem>();
             var files = _dataFolder.GetFiles("*.cat");
-            foreach(var finfo in files)
-            {
-                items.Add(LoadItem(finfo));
-            }
 
-            return items;
+            return files.Select(_LoadItem).ToList();
         }
 
         /// <summary>
@@ -79,11 +85,9 @@ namespace FileStorage
         /// <param name="item">Запись.</param>
         public void SaveItem(IStorageItem item)
         {
-            FileInfo finfo;
-
-            if (!_itemFiles.TryGetValue(item, out finfo))
+            if (!_itemFiles.TryGetValue(item, out FileInfo finfo))
             {
-                finfo = GenerateNewFileName();
+                finfo = _GenerateNewFileName();
             }
 
             try
@@ -97,7 +101,6 @@ namespace FileStorage
             //TODO
             catch (Exception ex)
             {
-
             }
         }
 
@@ -107,8 +110,7 @@ namespace FileStorage
         /// <param name="item">Удаляемая запись.</param>
         public void DeleteItem(IStorageItem item)
         {
-            FileInfo finfo;
-            if (_itemFiles.TryGetValue(item, out finfo))
+            if (_itemFiles.TryGetValue(item, out FileInfo finfo))
             {
                 finfo.Delete();
                 _itemFiles.Remove(item);
@@ -128,30 +130,36 @@ namespace FileStorage
             Parallel.ForEach(_itemFiles, item => SaveItem(item.Key));
         }
 
-        private FileInfo GenerateNewFileName()
+        #endregion Methods
+
+        #region Utilities
+
+        /// <summary>
+        /// Генерирует имя файла.
+        /// </summary>
+        /// <returns></returns>
+        private FileInfo _GenerateNewFileName()
         {
             Int32 i = _itemFiles.Count + 1;
             FileInfo finfo;
+
             do
             {
-                finfo = new FileInfo(String.Format("{0}\\{1}.cat", _dataFolder.FullName, i));
+                finfo = new FileInfo(String.Format(
+                    "{0}\\{1}.cat", _dataFolder.FullName, i));
                 i++;
             }
             while (_itemFiles.ContainsValue(finfo));
 
             return finfo;
-        } 
-
-        #endregion Methods
-
-        #region Utilities
+        }
 
         /// <summary>
         /// Загружает хранимую запись.
         /// </summary>
         /// <param name="finfo">Файл с записью.</param>
         /// <returns>Хранимая запись.</returns>
-        private IStorageItem LoadItem(FileInfo finfo)
+        private IStorageItem _LoadItem(FileInfo finfo)
         {
             IStorageItem item;
             var bformatter = new BinaryFormatter();
