@@ -5,123 +5,114 @@ using System.Collections.ObjectModel;
 
 namespace StudyAssistModel
 {
+    /// <summary>
+    /// Категория с темами.
+    /// </summary>
     [Serializable]
     public class XCategory : ICategory, IStorageItem
     {
-        #region fields
+        #region Fields
 
         String _name;
-        ObservableCollection<ITheme> _themes;
 
+        private ObservableCollection<ITheme> _themes;
+
+        /// <summary>
+        /// Сохраняет данные категории.
+        /// </summary>
         [NonSerialized]
         Action<IStorageItem> _saveItem;
+
+        /// <summary>
+        /// Удаляет данные категории.
+        /// </summary>
         [NonSerialized]
         Action<IStorageItem> _deleteItem;
 
-
-
-        #endregion
+        #endregion 
 
         #region ctors
             
         public XCategory()
         {
             _themes = new ObservableCollection<ITheme>();
-            _themes.CollectionChanged += Themes_CollectionChanged;
         }
-
-
 
         #endregion
 
         #region properties
+
+        /// <summary>
+        /// Название категории.
+        /// </summary>
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
 
             set
             {
-                if (String.IsNullOrEmpty(value))
-                    throw new ArgumentException("Название категории не может быть пустым");
-                else
-                    _name = value;
+                if (String.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException(
+                        "Название категории не может быть пустым");
+
+                _name = value;
             }
         }
 
-
+        /// <summary>
+        /// Сохраняет данные категории.
+        /// </summary>
         public Action<IStorageItem> SaveItem
         {
-            get
-            {
-                return _saveItem;
-            }
+            get { return _saveItem; }
 
-            set
-            {
-                _saveItem = value;
-            }
+            set { _saveItem = value; }
         }
 
+        /// <summary>
+        /// Удаляет данные категории.
+        /// </summary>
         public Action<IStorageItem> DeleteItem
         {
-            get
-            {
-                return _deleteItem;
-            }
+            get { return _deleteItem; }
 
-            set
-            {
-                _deleteItem = value;
-            }
+            set { _deleteItem = value; }
         }
 
+        /// <summary>
+        /// Список тем. //TODO переделать на список?
+        /// </summary>
         public ObservableCollection<ITheme> Themes
         {
-            get
-            {
-                return _themes;
-            }
+            get { return _themes; }
         }
-
-
 
         #endregion
 
-        #region methods
+        #region Methods
 
-        internal void Init()
-        {
-           // _themes = new ObservableCollection<ITheme>();
-            _themes.CollectionChanged += Themes_CollectionChanged;
-        }
-
+        /// <summary>
+        /// Сохраняет данные категории из хранилища.
+        /// </summary>
         public void Save()
         {
-            if (SaveItem != null)
-                SaveItem(this);
+            SaveItem?.Invoke(this);
         }
 
+        /// <summary>
+        /// Удаляет данные категории из хранилища.
+        /// </summary>
         public void Delete()
         {
-            if (DeleteItem != null)
-                DeleteItem(this);
-        }
-
-        #endregion
-
-        #region eventHandlers
-
-        private void Themes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            //Save();
+            DeleteItem?.Invoke(this);
         }
 
         #endregion
 
 
+        /// <summary>
+        /// TODO
+        /// </summary>
         public void RemoveFromStudy()
         {
             throw new NotImplementedException();

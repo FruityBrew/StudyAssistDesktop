@@ -24,6 +24,8 @@ namespace StudyAssistModel
     [Serializable]
     public class XProblem : IProblem
     {
+        #region Fields
+
         private string _answer;
 
         private bool _isStudy;
@@ -32,7 +34,7 @@ namespace StudyAssistModel
 
         private byte _studyLevel;
 
-        private DateTime _creationDate;
+        private DateTime? _creationDate;
 
         private DateTime? _addedToStudyDate;
 
@@ -40,19 +42,7 @@ namespace StudyAssistModel
 
         private bool _isAutoRepeate;
 
-        #region Constructors
-
-        public XProblem()
-        {
-            this.IsStudy = true;
-            IsAutoRepeate = true;
-            this.AddedToStudyDate = DateTime.Today;
-            this.CreationDate = DateTime.Today;
-            this.RepeatDate = null;
-            this.StudyLevelUp();
-        }
-
-        #endregion Constructors
+        #endregion Fields
 
         #region Properties
 
@@ -101,7 +91,7 @@ namespace StudyAssistModel
         /// <summary>
         /// Дата создания записи.
         /// </summary>
-        public DateTime CreationDate
+        public DateTime? CreationDate
         {
             get { return _creationDate; }
             set { _creationDate = value; }
@@ -126,6 +116,20 @@ namespace StudyAssistModel
         }
 
         #endregion Properties
+
+        #region Constructors
+
+        public XProblem()
+        {
+            this.IsStudy = true;
+            IsAutoRepeate = true;
+            this.AddedToStudyDate = DateTime.Today;
+            this.CreationDate = DateTime.Today;
+            this.RepeatDate = null;
+            this.StudyLevelUp();
+        }
+
+        #endregion Constructors
         
         #region Methods
 
@@ -162,27 +166,42 @@ namespace StudyAssistModel
             RepeatDate = DateTime.Today.AddDays(1);
         }
 
+        /// <summary>
+        /// Удаляет проблему с обучения.
+        /// </summary>
         public void RemoveFromStudy()
         {
             IsStudy = false;
             RepeatDate = null;
         }
 
+        /// <summary>
+        /// Сбрасывает уровень изученности в 0.
+        /// </summary>
         public void ResetLevel()
         {
             StudyLevel = 0;
         }
-
+        
+        /// <summary>
+        /// Добавляет проблему к изучению с повтором в определенную дату.
+        /// </summary>
+        /// <param name="repeateDate">Дата повтора.</param>
         public void AddToStudy(DateTime? repeateDate)
         {
             if(repeateDate.HasValue == false)
                 throw new ArgumentNullException(nameof(repeateDate));
 
+            AddedToStudyDate = DateTime.Today;
             IsAutoRepeate = false;
             IsStudy = true;
             RepeatDate = repeateDate;
         }
 
+        /// <summary>
+        /// Устанавливает дату повтора проблемы.
+        /// </summary>
+        /// <param name="repeateDate"></param>
         public void SetRepeateDate(DateTime? repeateDate)
         {
             if (repeateDate.HasValue == false)
@@ -192,12 +211,13 @@ namespace StudyAssistModel
         }
 
         /// <summary>
-        /// Добавляет проблему к изучению.
+        /// Добавляет проблему к изучению с определенным уровнем.
         /// </summary>
         /// <param name="level">Уровень изученности.</param>
         public void AddToStudy(byte level)
         {
             AddedToStudyDate = DateTime.Today;
+            IsAutoRepeate = true; // todo проверить
             IsStudy = true;
             StudyLevel = level;
             _SpecifyRepeatDate();
@@ -208,7 +228,7 @@ namespace StudyAssistModel
         #region Utilities
 
         /// <summary>
-        /// Устанавливает дату повторения.
+        /// Определяет дату повторения.
         /// </summary>
         private void _SpecifyRepeatDate()
         {
@@ -224,7 +244,7 @@ namespace StudyAssistModel
             if (RepeatDate == null)
                 RepeatDate = DateTime.Today;
 
-            switch (StudyLevel)
+            switch (StudyLevel) //TODO Вынести числа в константы
             {
                 case 1:
                     if(RepeatDate > DateTime.Today)

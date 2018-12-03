@@ -1,109 +1,91 @@
 ﻿using StudyAssistInterfaces;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace StudyAssistModel
 {
+    /// <summary>
+    /// Тема раздела.
+    /// </summary>
     [Serializable]
     public class XTheme : ITheme 
     {
-
         #region fields   
 
-        private DateTime _createDate;
-        DateTime _repeatDate;
-        String _name;
+        private String _name;
 
-        Boolean _isStudy;
-        ObservableCollection<IProblem> _problems;
+        private Boolean _isStudy;
 
-        #endregion
-
-        #region ctors
-
-        public XTheme()
-        {
-            _problems = new ObservableCollection<IProblem>();
-        }
+        private ObservableCollection<IProblem> _problems;
 
         #endregion
-
 
         #region properties
 
-        public DateTime CreationDate
-        {
-            get
-            {
-                return _createDate;
-            }
-
-            set
-            {
-                _createDate = value;
-            }
-        }
-
-        public DateTime RepeatDate
-        {
-            get
-            {
-                return _repeatDate;
-            }
-
-            set
-            {
-                _repeatDate = value;
-            }
-        }
-
+        /// <summary>
+        /// Показывает находится ли тема на изучении.
+        /// </summary>
         public bool IsStudy
         {
-            get
-            {
-                return _isStudy;
-            }
-
-            set
-            {
-                _isStudy = value;
-            }
+            get { return _isStudy; }
+            set { _isStudy = value; }
         }
 
+        /// <summary>
+        /// Название темы.
+        /// </summary>
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
 
             set
             {
                 if (String.IsNullOrEmpty(value))
-                    throw new ArgumentException("Название темы на может быть пустым");
+                    throw new ArgumentException(
+                        "Название темы на может быть пустым");
                 else
                     _name = value;
             }
         }
 
+        /// <summary>
+        /// Коллекция проблем.
+        /// </summary>
         public ObservableCollection<IProblem> Problems
         {
-            get
-            {
-                return _problems;
-            }
+            get { return _problems; }
         }
 
+        #endregion Properties
 
+        #region Constructors
+
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        public XTheme()
+        {
+            _problems = new ObservableCollection<IProblem>();
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        /// <summary>
+        /// Удаляет тему и все проблемы темы. 
+        /// </summary>
         public void RemoveFromStudy()
         {
-            throw new NotImplementedException();
+            IsStudy = false;
+
+            if(_problems == null)
+                return;
+
+            Parallel.ForEach(_problems, (a) => a.IsStudy = false);
         }
-        #endregion
 
-
-        #region methods
-        #endregion
-
+        #endregion Methods
     }
 }

@@ -93,7 +93,7 @@ namespace StudyAssistInterfaces
         void SetRepeateDate(DateTime? repeateDate);
 
         /// <summary>
-        /// Сбрасывает уровень изучености в 0.
+        /// Сбрасывает уровень изученности в 0.
         /// </summary>
         void ResetLevel();
 

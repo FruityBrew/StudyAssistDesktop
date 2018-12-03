@@ -19,11 +19,6 @@ namespace StudyAssistInterfaces
         #region Methods 
 
         /// <summary>
-        /// Инициализирует модель.
-        /// </summary>
-        void Init();
-
-        /// <summary>
         /// Сохраняет изменения в модели.
         /// </summary>
         void SaveChange();
