@@ -1,28 +1,88 @@
-﻿using StudyAssistInterfaces;
+﻿using FileStorage;
+using Ninject;
+using StudyAssistInterfaces;
 using StudyAssistIoC;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
-using Ninject;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using FileStorage;
+using System.Windows.Data;
 
 namespace StudyAssist.ViewModel
 {
     public class XCategoryVM : XBaseViewModel
     {
-        #region fields
+        #region Fields
 
         ICategory _category;
         ObservableCollection<XThemeVM> _themesObsColl;
         CollectionViewSource _themesCVS;
         ObservableCollection<XThemeVM> _themesToRepeatObsColl;
         CollectionViewSource _themesToRepeatCVS;
-        
 
-        #endregion 
+        #endregion Fields
 
-        #region ctors
+        #region Properties
+
+        /// <summary>
+        /// Название категории.
+        /// </summary>
+        public String Name
+        {
+            get { return Category.Name; }
+
+            set
+            {
+                Category.Name = value;
+
+                //     RaisePropertyChanged(this, "Name");
+                Save();
+            }
+        }
+
+        /// <summary>
+        /// Коллекция тем.
+        /// </summary>
+        public ICollectionView ThemesCollView
+        {
+            get { return _themesCVS.View; }
+        }
+
+        /// <summary>
+        /// Коллекция тем для повтора.
+        /// </summary>
+        public ICollectionView ThemesToRepeatCollView
+        {
+            get { return _themesToRepeatCVS.View; }
+        }
+
+        /// <summary>
+        /// Выбранная тема.
+        /// </summary>
+        public XThemeVM SelectedTheme
+        {
+            get { return ThemesCollView.CurrentItem as XThemeVM; }
+        }
+
+        /// <summary>
+        /// Выбранная тема из тем для повтора.
+        /// </summary>
+        public XThemeVM SelectedToRepeatTheme
+        {
+            get { return ThemesToRepeatCollView.CurrentItem as XThemeVM; }
+        }
+
+        /// <summary>
+        /// Интрефейс категории.
+        /// </summary>
+        public ICategory Category
+        {
+            get { return _category; }
+        }
+
+        #endregion Properties
+
+        #region Ctors
 
         public XCategoryVM(ICategory category)
         {
@@ -35,118 +95,70 @@ namespace StudyAssist.ViewModel
             _category = XKernel.Instance.Get<ICategory>();
             Init();
         }
-        #endregion
 
-        #region properties
+        #endregion Ctors
 
-        public String Name
-        {
-            get
-            {
-                return Category.Name;
-            }
+        #region Utilities
 
-            set
-            {
-                Category.Name = value;
-           //     RaisePropertyChanged(this, "Name");
-                Save();
-            }
-        } 
-
-        public ICollectionView ThemesCollView
-        {
-            get
-            {
-                return _themesCVS.View;
-            }
-        }
-
-        public ICollectionView ThemesToRepeatCollView
-        {
-            get
-            {
-                return _themesToRepeatCVS.View;
-            }
-        }
-
-        public XThemeVM SelectedTheme
-        {
-            get
-            {
-                return ThemesCollView.CurrentItem as XThemeVM;
-            }
-        }
-
-        public XThemeVM SelectedToRepeatTheme
-        {
-            get 
-            {
-                return ThemesToRepeatCollView.CurrentItem as XThemeVM;
-            }
-        }
-
-        public ICategory Category
-        {
-            get
-            {
-                return _category;
-            }
-
-        }
-
-        #endregion
-
-        #region methods
+        /// <summary>
+        /// Инициализирует внутренности.
+        /// </summary>
         private void Init()
         {
             _themesObsColl = new ObservableCollection<XThemeVM>();
             _themesToRepeatObsColl = new ObservableCollection<XThemeVM>();
+
             foreach(var theme in Category.Themes)
             {
                 XThemeVM th = new XThemeVM(theme, Save);
                 th.Save = this.Save;
+
                 _themesObsColl.Add(th);
+
                 if (!th.IsProblemRepeatEmpty)
                     _themesToRepeatObsColl.Add(th);
             }
-            _themesObsColl.CollectionChanged += ThemesObsColl_CollectionChanged;
+            _themesObsColl.CollectionChanged += 
+                ThemesObsColl_CollectionChanged;
+
             _themesCVS = new CollectionViewSource();
             _themesCVS.Source = _themesObsColl;
             _themesCVS.View.CurrentChanged += View_CurrentChanged;
+
             _themesToRepeatCVS = new CollectionViewSource();
             _themesToRepeatCVS.Source = _themesToRepeatObsColl;
-            _themesToRepeatCVS.View.CurrentChanged += ThemesRepeatView_CurrentChanged;
-
+            _themesToRepeatCVS.View.CurrentChanged += 
+                ThemesRepeatView_CurrentChanged;
          }
 
-
-
+        /// <summary>
+        /// Сохраняет изменения.
+        /// </summary>
         private void Save()
          {
             IStorageItem storItem = ((IStorageItem)this.Category);
             storItem.SaveItem(storItem);
         }
 
-        #endregion
+        #endregion Utilities
 
-        #region eventHandlers
+        #region EventHandlers
 
-        private void ThemesObsColl_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void ThemesObsColl_CollectionChanged(
+            object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                  XThemeVM theme = e.NewItems[0] as XThemeVM;
                  theme.Save = this.Save;
                  Category.Themes.Add(theme.Theme);
             }
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            if (e.Action == NotifyCollectionChangedAction.Remove)
                 Category.Themes.Remove((ITheme)e.OldItems[0]);
 
             Save();
         }
-
 
         private void View_CurrentChanged(object sender, EventArgs e)
         {
@@ -158,8 +170,6 @@ namespace StudyAssist.ViewModel
             RaisePropertyChanged(this, "SelectedToRepeatTheme");
         }
 
-        #endregion
-
-
+        #endregion EventHandlers
     }
 }
