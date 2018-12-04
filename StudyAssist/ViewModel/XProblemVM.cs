@@ -78,8 +78,20 @@ namespace StudyAssist.ViewModel
             get { return Problem.IsAutoRepeate; }
             set
             {
+                if(value == Problem.IsAutoRepeate)
+                    return;
+
                 Problem.IsAutoRepeate = value;
-                Problem.AddToStudy(Problem.StudyLevel);
+
+                if (Problem.IsAutoRepeate == true)
+                {
+                    Problem.AddToStudy(Problem.StudyLevel);
+                }
+                else
+                {
+                    Problem.AddToStudy(RepeatDate ?? DateTime.Today);
+                }
+
                 Save();
 
                 RaisePropertyChanged(this, "IsAutoRepeate");

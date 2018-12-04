@@ -154,6 +154,7 @@ namespace StudyAssist.ViewModel
         {
             _problemsObsColl = new ObservableCollection<XProblemVM>();
             _problemsToRepeatObsColl = new ObservableCollection<XProblemVM>();
+
             foreach (var problem in _theme.Problems)
             {
                 XProblemVM prob = new XProblemVM(problem, Save);
@@ -161,7 +162,9 @@ namespace StudyAssist.ViewModel
                 if (prob.RepeatDate <= DateTime.Today && prob.IsStudy)
                     _problemsToRepeatObsColl.Add(prob);
             }
-            _problemsObsColl.CollectionChanged += ProblemsObsColl_CollectionChanged;
+
+            _problemsObsColl.CollectionChanged +=
+                ProblemsObsColl_CollectionChanged;
 
             _problemsCVS = new CollectionViewSource();
             _problemsCVS.Source = _problemsObsColl;
@@ -169,7 +172,8 @@ namespace StudyAssist.ViewModel
 
             _problemsToRepeatCVS = new CollectionViewSource();
             _problemsToRepeatCVS.Source = _problemsToRepeatObsColl;
-            _problemsToRepeatCVS.View.CurrentChanged += ProblemsToRepeat_CurrentChanged;
+            _problemsToRepeatCVS.View.CurrentChanged += 
+                ProblemsToRepeat_CurrentChanged;
         }
 
         #endregion Utilities
