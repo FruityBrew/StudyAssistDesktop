@@ -42,6 +42,8 @@ namespace StudyAssistModel
 
         private bool _isAutoRepeate;
 
+
+
         #endregion Fields
 
         #region Properties
@@ -244,40 +246,9 @@ namespace StudyAssistModel
             if (RepeatDate == null)
                 RepeatDate = DateTime.Today;
 
-            switch (StudyLevel) //TODO Вынести числа в константы
-            {
-                case 1:
-                    if(RepeatDate > DateTime.Today)
-                        break;
-                    RepeatDate = RepeatDate?.AddDays(1);
-                    break;
-                case 2:
-                    if (RepeatDate > DateTime.Today)
-                        break;
-                    RepeatDate = RepeatDate?.AddDays(3);
-                    break;
-                case 3:
-                    if (RepeatDate > DateTime.Today)
-                        break;
-                    RepeatDate = RepeatDate?.AddDays(7);
-                    break;
-                case 4:
-                    if (RepeatDate > DateTime.Today)
-                        break;
-                    RepeatDate = RepeatDate?.AddDays(14);
-                    break;
-                case 5:
-                    if (RepeatDate > DateTime.Today)
-                        break;
-                    RepeatDate = RepeatDate?.AddDays(30);
-                    break;
-                //case 6:
-                //    _repeateDate = _repeateDate.AddDays(45);
-                //break;
-                default:
-                    RepeatDate = RepeatDate?.AddDays(45);
-                    break;
-            }
+            RepeatDateCalculator repa = new RepeatDateCalculator();
+
+            RepeatDate = repa.GetRepeatDate(StudyLevel, RepeatDate);
         }
 
         #endregion Utilities

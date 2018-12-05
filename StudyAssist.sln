@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist", "StudyAssist\StudyAssist.csproj", "{78524A6F-A617-42DB-824D-48CFD8AF23BF}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistIoC", "StudyAssistIoC\StudyAssistIoC.csproj", "{22948EA6-C8B2-4C3E-9F3D-D3FEE3D6E4A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage", "FileStorage\FileStorage.csproj", "{3472C8C0-5B0E-409B-B1FC-93262CDD0746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistModelTests", "StudyAssistModelTests\StudyAssistModelTests.csproj", "{1DE11081-F06B-4943-9B63-98151007ED46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,8 +41,15 @@ Global
 		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3472C8C0-5B0E-409B-B1FC-93262CDD0746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DE11081-F06B-4943-9B63-98151007ED46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DE11081-F06B-4943-9B63-98151007ED46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DE11081-F06B-4943-9B63-98151007ED46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DE11081-F06B-4943-9B63-98151007ED46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC4C8758-EC43-45FD-98B1-44542A94484C}
 	EndGlobalSection
 EndGlobal
