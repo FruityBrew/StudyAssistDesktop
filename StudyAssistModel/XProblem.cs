@@ -87,7 +87,7 @@ namespace StudyAssistModel
         public byte StudyLevel
         {
             get { return _studyLevel; }
-            set { _studyLevel = value; }
+            private set { _studyLevel = value; }
         }
 
         /// <summary>
@@ -191,24 +191,20 @@ namespace StudyAssistModel
         /// <param name="repeateDate">Дата повтора.</param>
         public void AddToStudy(DateTime? repeateDate)
         {
+            if(IsStudy)
+                throw new InvalidOperationException(
+                    "Проблема уже на изучении");
+
             if(repeateDate.HasValue == false)
                 throw new ArgumentNullException(nameof(repeateDate));
 
             AddedToStudyDate = DateTime.Today;
+
+            // видимо, считаю, что если добавляется по дате, 
+            // то автоматом неавтоповтор:
             IsAutoRepeate = false;
+
             IsStudy = true;
-            RepeatDate = repeateDate;
-        }
-
-        /// <summary>
-        /// Устанавливает дату повтора проблемы.
-        /// </summary>
-        /// <param name="repeateDate"></param>
-        public void SetRepeateDate(DateTime? repeateDate)
-        {
-            if (repeateDate.HasValue == false)
-                throw new ArgumentNullException(nameof(repeateDate));
-
             RepeatDate = repeateDate;
         }
 

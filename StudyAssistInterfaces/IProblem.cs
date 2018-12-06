@@ -30,17 +30,17 @@ namespace StudyAssistInterfaces
         DateTime? AddedToStudyDate { get; }
 
         /// <summary>
-        /// Рассчетная дата повторения.
+        /// Расчетная дата повторения.
         /// </summary>
         DateTime? RepeatDate { get; set; }
 
         /// <summary>
-        /// Уровень изученности вопроса.
+        /// Уровень изученности вопроса (сколько раз был повторен вопрос).
         /// </summary>
-        Byte StudyLevel { get; set; }
+        Byte StudyLevel { get; }
 
         /// <summary>
-        /// Включен ли автоматический расчет даты повторения.
+        /// Включен ли автоматический расчет даты повторения (автоповтор).
         /// </summary>
         Boolean IsAutoRepeate { get; set; }
 
@@ -85,12 +85,6 @@ namespace StudyAssistInterfaces
         /// <param name="repeateDate">Дата, с которой нужно 
         /// начать обучение.</param>
         void AddToStudy(DateTime? repeateDate);
-
-        /// <summary>
-        /// Устанавливает дату следующего повторения вопроса.
-        /// </summary>
-        /// <param name="repeateDate">Дата следующего повторения.</param>
-        void SetRepeateDate(DateTime? repeateDate);
 
         /// <summary>
         /// Сбрасывает уровень изученности в 0.

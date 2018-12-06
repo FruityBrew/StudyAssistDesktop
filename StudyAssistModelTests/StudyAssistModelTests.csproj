@@ -56,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StudyAssistInterfaces\StudyAssistInterfaces.csproj">
+      <Project>{A2CD8D0D-A85B-488F-9AC5-5922AC8CEF21}</Project>
+      <Name>StudyAssistInterfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StudyAssistModel\StudyAssistModel.csproj">
       <Project>{B4332724-CA19-453F-94F3-5688F608A338}</Project>
       <Name>StudyAssistModel</Name>
