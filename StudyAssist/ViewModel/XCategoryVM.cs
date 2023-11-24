@@ -149,6 +149,32 @@ namespace StudyAssist.ViewModel
 
         #endregion Utilities
 
+        public void Update()
+        {
+            //var oldSelected = this.SelectedToRepeatTheme;
+            //_themesToRepeatObsColl.Clear();
+
+            //foreach(var theme in Category.Themes.OrderBy(o => o.Name))
+            //{
+
+            //    if(theme.IsProblemRepeatEmpty)
+            //        _themesToRepeatObsColl.Remove(th);
+            //}
+
+            foreach(var d in _themesToRepeatObsColl)
+            {
+                if(d.IsProblemRepeatEmpty)
+                    _themesToRepeatObsColl.Remove(d);
+            }
+
+            //_themesToRepeatCVS = new CollectionViewSource();
+            //_themesToRepeatCVS.View.CurrentChanged +=
+            //    ThemesRepeatView_CurrentChanged;
+            //_themesToRepeatCVS.View.Refresh();
+        }
+
+
+
         #region EventHandlers
 
         private void ThemesObsColl_CollectionChanged(

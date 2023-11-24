@@ -33,5 +33,12 @@ namespace StudyAssist
             this.DataContext = _mainVM;
         }
 
+
+
+        private void SetOff_ButtonClick_EventHandler(object sender, RoutedEventArgs e)
+        {
+            this._mainVM.SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand.Execute("");
+            this._mainVM.Init();
+        }
     }
 }

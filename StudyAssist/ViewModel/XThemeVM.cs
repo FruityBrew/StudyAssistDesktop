@@ -178,6 +178,29 @@ namespace StudyAssist.ViewModel
 
         #endregion Utilities
 
+        public void Update()
+        {
+            _problemsToRepeatObsColl.Clear();
+
+            foreach(var problem in _theme.Problems)
+            {
+                XProblemVM prob = new XProblemVM(problem, Save);
+                if(prob.RepeatDate <= DateTime.Today && prob.IsStudy)
+                    _problemsToRepeatObsColl.Add(prob);
+            }
+
+            _problemsToRepeatCVS = new CollectionViewSource();
+            _problemsToRepeatCVS.Source = _problemsToRepeatObsColl;
+            _problemsToRepeatCVS.View.CurrentChanged +=
+                ProblemsToRepeat_CurrentChanged;
+            //_problemsToRepeatObsColl.CollectionChanged += _problemsToRepeatObsColl_CollectionChanged;
+        }
+
+        //private void _problemsToRepeatObsColl_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         #region EventHandlers
 
         private void ProblemsObsColl_CollectionChanged(
