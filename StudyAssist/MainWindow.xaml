@@ -181,6 +181,7 @@
                     <Grid Grid.Column="0" Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="1*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -188,16 +189,19 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-                        <Label Grid.Row="0" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <Label Grid.Row="0" Grid.Column="0" Content="На какую дату повторы:"></Label>
+                        <DatePicker Grid.Row="0" Grid.Column="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="XDatePickerDateRepeat" BorderBrush="LightSteelBlue"  SelectedDate="{Binding SelectedRepeatDate}"></DatePicker>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
-                        <DataGrid x:Name="XDataGridCategories" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+                        <DataGrid x:Name="XDataGridCategories" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*"  FontSize="14"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <DataGrid x:Name="XDataGridThemes" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesToRepeatCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
+                        <DataGrid x:Name="XDataGridThemes" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesToRepeatCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название темы" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" ElementStyle="{StaticResource TextBlockStyle}" Width="250*"  FontSize="14"/>
                             </DataGrid.Columns>
@@ -223,10 +227,17 @@
                         </StackPanel>
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Content="Показать ответ" Style="{StaticResource XStyleToButton}" Margin="3" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.ShowAnswerCommand}" />
-                            <Button 
+                            <!--<Button 
                                 Content="Зачесть" 
                                 Style="{StaticResource XStyleToButton}" 
                                 Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand}" 
+                                Margin="3"
+                                IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
+                            </Button>-->
+                            <Button 
+                                Content="Зачесть" 
+                                Style="{StaticResource XStyleToButton}" 
+                                Click="SetOff_ButtonClick_EventHandler"
                                 Margin="3"
                                 IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
                             </Button>
