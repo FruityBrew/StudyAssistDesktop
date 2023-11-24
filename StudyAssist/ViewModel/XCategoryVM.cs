@@ -3,15 +3,22 @@ using Ninject;
 using StudyAssistInterfaces;
 using StudyAssistIoC;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StudyAssist.ViewModel
 {
     public class XCategoryVM : XBaseViewModel
     {
+        public class T
+        {
+            public string Name { get; set; }
+        }
+
         #region Fields
 
         ICategory _category;
@@ -108,7 +115,7 @@ namespace StudyAssist.ViewModel
             _themesObsColl = new ObservableCollection<XThemeVM>();
             _themesToRepeatObsColl = new ObservableCollection<XThemeVM>();
 
-            foreach(var theme in Category.Themes)
+            foreach(var theme in Category.Themes.OrderBy(o => o.Name))
             {
                 XThemeVM th = new XThemeVM(theme, Save);
                 th.Save = this.Save;
