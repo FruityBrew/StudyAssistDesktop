@@ -2,6 +2,7 @@
 using StudyAssistInterfaces;
 using StudyAssistIoC;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -79,13 +80,24 @@ namespace StudyAssist.ViewModel
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
             _categoriesToRepeat = new ObservableCollection<XCategoryVM>();
 
+            List<string> defaultCats = Properties.Settings.Default.DefaultCategories
+                .Split(' ')
+                .ToList();
+
             foreach(var category in _model.Categories)
             {
                 XCategoryVM categoryVM = new XCategoryVM(category);
-                _categoriesObsColl.Add(categoryVM);
 
-                if(!categoryVM.IsProblemRepeatEmpty)
-                    _categoriesToRepeat.Add(categoryVM);
+                foreach(var defaultName in defaultCats)
+                {
+                    if (categoryVM.Name.Contains(defaultName))
+                    {
+                        _categoriesObsColl.Add(categoryVM);
+
+                        if (!categoryVM.IsProblemRepeatEmpty)
+                            _categoriesToRepeat.Add(categoryVM);
+                    }
+                }
             }
 
             _categoriesObsColl.CollectionChanged += 

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudyAssist"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="1000"
+        Closed="OnExit"
+        Title="StudyAssistClassic" Height="750" Width="1000"
         d:DataContext="MainViewModel">
     <Window.Resources>
         <ResourceDictionary>
@@ -270,6 +271,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"></RowDefinition>
                         <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+
                     </Grid.RowDefinitions>  
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10"></ColumnDefinition>
@@ -283,6 +287,10 @@
                             Content="Снять всё с обучения"
                             Command="{Binding RemoveAllFromStudy}"
                             Height="30" />
+
+                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right">Разделы для отображения (через пробел):</Label>
+                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Source={StaticResource Settings}, Path=Default.DefaultCategories}"></TextBox>
+                    
                 </Grid>
                     
 

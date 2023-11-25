@@ -38,5 +38,11 @@ namespace StudyAssist
             this._mainVM.SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.StudyLevelUp();
             _mainVM.RemoveRepeat();
         }
+
+        public void OnExit(object sender, EventArgs eventArgs)
+        {
+            Properties.Settings.Default.Save();
+
+        }
     }
 }
