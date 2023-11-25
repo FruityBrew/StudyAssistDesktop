@@ -145,6 +145,15 @@ namespace StudyAssist.ViewModel
 
         #endregion Ctors
 
+        #region Methods
+
+        public void RemoveFromRepeat()
+        {
+            _problemsToRepeatObsColl.Remove(SelectedProblemToRepeat);
+        }
+
+        #endregion Methods
+
         #region Utilities
 
         /// <summary>

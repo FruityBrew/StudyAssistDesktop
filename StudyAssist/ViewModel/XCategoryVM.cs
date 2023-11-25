@@ -87,6 +87,20 @@ namespace StudyAssist.ViewModel
             get { return _category; }
         }
 
+        /// <summary>
+        /// Признак того, что список проблем на повторение пуст.
+        /// </summary>
+        public Boolean IsProblemRepeatEmpty
+        {
+            get
+            {
+                if (_themesToRepeatObsColl.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         #endregion Properties
 
         #region Ctors
@@ -104,6 +118,15 @@ namespace StudyAssist.ViewModel
         }
 
         #endregion Ctors
+
+        #region Methods
+
+        public void RemoveRepeat()
+        {
+            _themesToRepeatObsColl.Remove(SelectedToRepeatTheme);
+        }
+
+        #endregion Methods
 
         #region Utilities
 

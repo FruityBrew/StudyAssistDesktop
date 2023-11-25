@@ -195,13 +195,13 @@
                         <Label Grid.Row="1" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
                         <Label Grid.Row="1" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
-                        <DataGrid x:Name="XDataGridCategories" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+                        <DataGrid x:Name="XDataGridCategories" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CategoriesToRepeatCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*"  FontSize="14"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <DataGrid x:Name="XDataGridThemes" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesToRepeatCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
+                        <DataGrid x:Name="XDataGridThemes" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SelectedToRepeatCategory.ThemesToRepeatCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название темы" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" ElementStyle="{StaticResource TextBlockStyle}" Width="250*"  FontSize="14"/>
                             </DataGrid.Columns>
@@ -230,7 +230,7 @@
                             <!--<Button 
                                 Content="Зачесть" 
                                 Style="{StaticResource XStyleToButton}" 
-                                Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.LevelUpCommand}" 
+                                Command="{Binding RepeatProblemLevelUp}" 
                                 Margin="3"
                                 IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
                             </Button>-->

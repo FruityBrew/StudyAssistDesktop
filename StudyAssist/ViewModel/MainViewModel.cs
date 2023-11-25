@@ -20,6 +20,8 @@ namespace StudyAssist.ViewModel
         IModel _model;
         ObservableCollection<XCategoryVM> _categoriesObsColl;
         CollectionViewSource _categoriesCVS;
+        private ObservableCollection<XCategoryVM> _categoriesToRepeat;
+        private CollectionViewSource _categoriesToRepeatCVS;
 
         #endregion Fields
 
@@ -43,6 +45,16 @@ namespace StudyAssist.ViewModel
             get { return CategoriesCollView.CurrentItem as XCategoryVM; }
         }
 
+        public ICollectionView CategoriesToRepeatCollView
+        {
+            get { return _categoriesToRepeatCVS.View; }
+        }
+
+        public XCategoryVM SelectedToRepeatCategory
+        {
+            get { return CategoriesToRepeatCollView.CurrentItem as XCategoryVM; }
+        }
+
         #endregion Properties
 
         #region Сtors
@@ -52,10 +64,15 @@ namespace StudyAssist.ViewModel
             _model = XKernel.Instance.Get<IModel>();
 
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
+            _categoriesToRepeat = new ObservableCollection<XCategoryVM>();
 
             foreach(var category in _model.Categories)
             {
-                _categoriesObsColl.Add(new XCategoryVM(category));
+                XCategoryVM categoryVM = new XCategoryVM(category);
+                _categoriesObsColl.Add(categoryVM);
+
+                if(!categoryVM.IsProblemRepeatEmpty)
+                    _categoriesToRepeat.Add(categoryVM);
             }
 
             _categoriesObsColl.CollectionChanged += 
@@ -65,10 +82,15 @@ namespace StudyAssist.ViewModel
             _categoriesCVS.Source = _categoriesObsColl;
             _categoriesCVS.View.CurrentChanged += View_CurrentChanged;
 
+            _categoriesToRepeatCVS = new CollectionViewSource();
+            _categoriesToRepeatCVS.Source = _categoriesToRepeat; ;
+            _categoriesToRepeatCVS.View.CurrentChanged += 
+                CategoriesRepeatView_CurrentChanged;
+
             RemoveAllFromStudy = new XCommand(_RemoveAllFromStudy);
         }
 
-        #endregion Properties
+        #endregion Ctors
 
         #region Utilities
 
@@ -94,7 +116,27 @@ namespace StudyAssist.ViewModel
 
         #endregion Utilities
 
+        #region Methods
+        public void RemoveRepeat()
+        {
+            SelectedToRepeatCategory.SelectedToRepeatTheme.RemoveFromRepeat();
+            if (SelectedToRepeatCategory.SelectedToRepeatTheme.IsProblemRepeatEmpty)
+            {
+                SelectedToRepeatCategory.RemoveRepeat();
+
+                if (SelectedToRepeatCategory.IsProblemRepeatEmpty)
+                    _categoriesToRepeat.Remove(SelectedToRepeatCategory);
+            }
+        }
+
+        #endregion Methods
+
         #region EentHandlers
+
+        private void CategoriesRepeatView_CurrentChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(this, nameof(SelectedToRepeatCategory));
+        }
 
         private void CategoriesObsColl_CollectionChanged(
             object sender, NotifyCollectionChangedEventArgs e)
