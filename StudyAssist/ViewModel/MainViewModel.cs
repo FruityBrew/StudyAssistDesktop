@@ -25,8 +25,6 @@ namespace StudyAssist.ViewModel
 
         #region Properties
 
-        public DateTime SelectedRepeatDate { get; set; }
-
         public XCommand RemoveAllFromStudy { get; set; }
 
         /// <summary>
@@ -51,7 +49,6 @@ namespace StudyAssist.ViewModel
 
         public MainViewModel()
         {
-            SelectedRepeatDate = DateTime.Now;
             _model = XKernel.Instance.Get<IModel>();
 
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
@@ -61,7 +58,7 @@ namespace StudyAssist.ViewModel
                 _categoriesObsColl.Add(new XCategoryVM(category));
             }
 
-            _categoriesObsColl.CollectionChanged +=
+            _categoriesObsColl.CollectionChanged += 
                 CategoriesObsColl_CollectionChanged;
 
             _categoriesCVS = new CollectionViewSource();
@@ -118,14 +115,5 @@ namespace StudyAssist.ViewModel
         }
 
         #endregion
-
-        public void Init()
-        {
-            this.SelectedCategory.SelectedTheme.Update();
-            this.SelectedCategory.Update();
-
-        }
-
-
     }
 }
