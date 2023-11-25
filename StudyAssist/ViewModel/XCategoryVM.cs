@@ -14,11 +14,6 @@ namespace StudyAssist.ViewModel
 {
     public class XCategoryVM : XBaseViewModel
     {
-        public class T
-        {
-            public string Name { get; set; }
-        }
-
         #region Fields
 
         ICategory _category;
@@ -124,6 +119,18 @@ namespace StudyAssist.ViewModel
         public void RemoveRepeat()
         {
             _themesToRepeatObsColl.Remove(SelectedToRepeatTheme);
+        }
+
+        public void UpdateRepeats(DateTime repeateDate)
+        {
+            _themesToRepeatObsColl.Clear();
+
+            foreach (var theme in _themesObsColl)
+            {
+                theme.UpdateRepeats(repeateDate);
+                if (theme.IsProblemRepeatEmpty == false)
+                    _themesToRepeatObsColl.Add(theme);
+            }
         }
 
         #endregion Methods

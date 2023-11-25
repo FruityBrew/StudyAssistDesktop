@@ -22,6 +22,7 @@ namespace StudyAssist.ViewModel
         CollectionViewSource _categoriesCVS;
         private ObservableCollection<XCategoryVM> _categoriesToRepeat;
         private CollectionViewSource _categoriesToRepeatCVS;
+        private DateTime _repeatDate;
 
         #endregion Fields
 
@@ -55,6 +56,17 @@ namespace StudyAssist.ViewModel
             get { return CategoriesToRepeatCollView.CurrentItem as XCategoryVM; }
         }
 
+        public DateTime RepeatDate
+        {
+            get => _repeatDate;
+            set 
+            { 
+                _repeatDate = value;
+                RaisePropertyChanged(this, nameof(RepeatDate));
+                UpdateCategoriesToRepeatWhithRepeatDate();
+            }
+        }
+
         #endregion Properties
 
         #region Сtors
@@ -62,6 +74,7 @@ namespace StudyAssist.ViewModel
         public MainViewModel()
         {
             _model = XKernel.Instance.Get<IModel>();
+            RepeatDate = DateTime.Today;
 
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
             _categoriesToRepeat = new ObservableCollection<XCategoryVM>();
@@ -83,7 +96,7 @@ namespace StudyAssist.ViewModel
             _categoriesCVS.View.CurrentChanged += View_CurrentChanged;
 
             _categoriesToRepeatCVS = new CollectionViewSource();
-            _categoriesToRepeatCVS.Source = _categoriesToRepeat; ;
+            _categoriesToRepeatCVS.Source = _categoriesToRepeat;
             _categoriesToRepeatCVS.View.CurrentChanged += 
                 CategoriesRepeatView_CurrentChanged;
 
@@ -117,6 +130,22 @@ namespace StudyAssist.ViewModel
         #endregion Utilities
 
         #region Methods
+
+        public void UpdateCategoriesToRepeatWhithRepeatDate()
+        {
+            if(_categoriesToRepeat == null) 
+                return;
+
+            _categoriesToRepeat.Clear();
+
+            foreach(var category in _categoriesObsColl)
+            {
+                category.UpdateRepeats(RepeatDate);
+                if(category.IsProblemRepeatEmpty == false)
+                    _categoriesToRepeat.Add(category);
+            }
+        }
+
         public void RemoveRepeat()
         {
             SelectedToRepeatCategory.SelectedToRepeatTheme.RemoveFromRepeat();

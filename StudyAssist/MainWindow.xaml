@@ -190,7 +190,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="На какую дату повторы:"></Label>
-                        <DatePicker Grid.Row="0" Grid.Column="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="XDatePickerDateRepeat" BorderBrush="LightSteelBlue"  SelectedDate="{Binding SelectedRepeatDate}"></DatePicker>
+                        <DatePicker Grid.Row="0" Grid.Column="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="XDatePickerDateRepeat" BorderBrush="LightSteelBlue"  SelectedDate="{Binding RepeatDate}"></DatePicker>
                         
                         <Label Grid.Row="1" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
                         <Label Grid.Row="1" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>

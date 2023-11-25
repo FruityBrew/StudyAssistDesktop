@@ -152,6 +152,17 @@ namespace StudyAssist.ViewModel
             _problemsToRepeatObsColl.Remove(SelectedProblemToRepeat);
         }
 
+        public void UpdateRepeats(DateTime repeateDate)
+        {
+            _problemsToRepeatObsColl.Clear();
+
+            foreach (var problem in _problemsObsColl)
+            {
+                if (problem.RepeatDate <= repeateDate && problem.IsStudy)
+                    _problemsToRepeatObsColl.Add(problem);
+            }
+        }
+
         #endregion Methods
 
         #region Utilities
