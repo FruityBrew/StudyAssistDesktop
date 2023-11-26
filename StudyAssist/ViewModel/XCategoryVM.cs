@@ -21,6 +21,8 @@ namespace StudyAssist.ViewModel
         CollectionViewSource _themesCVS;
         ObservableCollection<XThemeVM> _themesToRepeatObsColl;
         CollectionViewSource _themesToRepeatCVS;
+        private bool _isSearch;
+        private string _searchText;
 
         #endregion Fields
 
@@ -82,6 +84,16 @@ namespace StudyAssist.ViewModel
             get { return _category; }
         }
 
+        public string SearchText 
+        {
+            get => _searchText;
+            set
+            {
+               _searchText = value;
+                RaisePropertyChanged(this, nameof(SearchText));
+            }
+        }
+
         /// <summary>
         /// Признак того, что список проблем на повторение пуст.
         /// </summary>
@@ -96,6 +108,10 @@ namespace StudyAssist.ViewModel
             }
         }
 
+        public XCommand SearchCommand { get; set; }
+
+        public XCommand ResetCommand { get; set; }
+
         #endregion Properties
 
         #region Ctors
@@ -104,17 +120,32 @@ namespace StudyAssist.ViewModel
         {
             _category = category;
             Init();
-        } 
+            SearchCommand = new XCommand(SearchProblems);
+            ResetCommand = new XCommand(ResetProblems);
+        }
 
         public XCategoryVM()
         {
             _category = XKernel.Instance.Get<ICategory>();
             Init();
+            SearchCommand = new XCommand(SearchProblems);
+            ResetCommand = new XCommand(ResetProblems);
         }
 
         #endregion Ctors
 
         #region Methods
+
+        public void SearchProblems()
+        {
+            UpdateProblems(SearchText);
+        }
+
+        public void ResetProblems()
+        {
+            SearchText = string.Empty;
+            UpdateProblems(SearchText);
+        }
 
         public void RemoveRepeat()
         {
@@ -131,6 +162,26 @@ namespace StudyAssist.ViewModel
                 if (theme.IsProblemRepeatEmpty == false)
                     _themesToRepeatObsColl.Add(theme);
             }
+        }
+
+        public void UpdateProblems(string searchText)
+        {
+            _isSearch = true;
+            _themesObsColl.Clear();
+            //List<XThemeVM> aux = new List<XThemeVM>();
+
+            foreach (var theme in _category.Themes)
+            {
+                var themeVm = new XThemeVM(theme, Save);
+                themeVm.UpdateProblems(searchText);
+                if (themeVm.ProblemsObsColl.Count > 0)
+                    _themesObsColl.Add(themeVm); 
+            }
+
+            //foreach (var themeVm in aux)
+            //    _themesObsColl.Add(themeVm);
+
+            _isSearch = false;
         }
 
         #endregion Methods
@@ -184,8 +235,11 @@ namespace StudyAssist.ViewModel
         private void ThemesObsColl_CollectionChanged(
             object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (_isSearch)
+                return;
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
+                
                  XThemeVM theme = e.NewItems[0] as XThemeVM;
                  theme.Save = this.Save;
                  Category.Themes.Add(theme.Theme);

@@ -2,6 +2,7 @@
 using StudyAssistInterfaces;
 using StudyAssistIoC;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -20,6 +21,7 @@ namespace StudyAssist.ViewModel
         ObservableCollection<XProblemVM> _problemsToRepeatObsColl;
         CollectionViewSource _problemsToRepeatCVS;
         Action _save;
+        private bool _isSearch;
 
         #endregion Fields
 
@@ -163,6 +165,25 @@ namespace StudyAssist.ViewModel
             }
         }
 
+        public void UpdateProblems(string searchText)
+        {
+            _isSearch = true;
+            _problemsObsColl.Clear();
+            //List<XProblemVM> aux = new List<XProblemVM>();
+            foreach (var problem in _theme.Problems)
+            {
+
+                if(string.IsNullOrEmpty(searchText))
+                    _problemsObsColl.Add(new XProblemVM(problem, Save));
+                else if (problem.Answer.Contains(searchText))
+                    _problemsObsColl.Add(new XProblemVM(problem, Save));
+            }
+
+            //foreach (var problem in aux)
+            //    _problemsObsColl.Add(problem);
+            _isSearch = false;
+        }
+
         #endregion Methods
 
         #region Utilities
@@ -203,6 +224,9 @@ namespace StudyAssist.ViewModel
         private void ProblemsObsColl_CollectionChanged(
             object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (_isSearch)
+                return;
+
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 XProblemVM problem = e.NewItems[0] as XProblemVM;

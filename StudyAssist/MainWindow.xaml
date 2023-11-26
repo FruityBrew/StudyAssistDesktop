@@ -34,6 +34,7 @@
                     <Grid Grid.Column="0" Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="1*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -41,16 +42,38 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-                        <Label Grid.Row="0" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <TextBox Text="{Binding Path=SelectedCategory.SearchText}" TextAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                        <Button Style="{StaticResource XStyleToButton}" 
+                                Grid.Row="0" Grid.Column="1" 
+                                HorizontalAlignment="Left" 
+                                Content="Поиск" 
+                                VerticalAlignment="Center" 
+                                Height="30" 
+                                Command="{Binding Path=SelectedCategory.SearchCommand}">
 
-                        <DataGrid x:Name="XDataGridCategories_All" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
+
+
+                            </Button>
+                        <Button Style="{StaticResource XStyleToButton}" 
+                                Grid.Row="0" Grid.Column="1" 
+                                HorizontalAlignment="Right" 
+                                Content="Сброс" 
+                                VerticalAlignment="Center" 
+                                Height="30" 
+                                Width="100"
+                                Command="{Binding Path=SelectedCategory.ResetCommand}">
+                        </Button>
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Разделы:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Темы раздела:" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+                        <DataGrid x:Name="XDataGridCategories_All" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding CategoriesCollView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название раздела" Binding="{Binding Name}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*" FontSize="14" />
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <DataGrid x:Name="XDataGridThemes_All" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
+                        <DataGrid x:Name="XDataGridThemes_All" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding SelectedCategory.ThemesCollView}" Style="{StaticResource DataGridStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0,1,1,1">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название темы" Binding="{Binding Name, UpdateSourceTrigger=LostFocus}" ElementStyle="{StaticResource TextBlockStyle}" Width="210*" FontSize="14"/>
                             </DataGrid.Columns>
@@ -63,6 +86,7 @@
                             <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition Height="100"></RowDefinition>
+
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,5" HorizontalAlignment="Left" Background="LightSalmon" >
@@ -146,7 +170,6 @@
 
                             </StackPanel>
                         </Grid>
-
 
                     </Grid>
 
