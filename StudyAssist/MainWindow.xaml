@@ -242,15 +242,15 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10, 5" Background="LightSalmon">
                             <Label Content="Повторы: " FontSize="16" VerticalAlignment="Center"  ></Label>
-                            <Label Content="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.StudyLevel}" FontSize="16" VerticalAlignment="Center"></Label>
+                            <Label Content="{Binding SelectedToRepeatCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.StudyLevel}" FontSize="16" VerticalAlignment="Center"></Label>
                             <!--Label Content="из 7" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></-->
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10, 5" Background="LightSalmon">
                             <Label Content="Дата повтора:" FontSize="16" VerticalAlignment="Center" ></Label>
-                            <Label Content="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.RepeatDateString}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                            <Label Content="{Binding SelectedToRepeatCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.RepeatDateString}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Content="Показать ответ" Style="{StaticResource XStyleToButton}" Margin="3" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.ShowAnswerCommand}" />
+                            <Button Content="Показать ответ" Style="{StaticResource XStyleToButton}" Margin="3" Command="{Binding SelectedToRepeatCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.ShowAnswerCommand}" />
                             <!--<Button 
                                 Content="Зачесть" 
                                 Style="{StaticResource XStyleToButton}" 
@@ -263,28 +263,28 @@
                                 Style="{StaticResource XStyleToButton}" 
                                 Click="SetOff_ButtonClick_EventHandler"
                                 Margin="3"
-                                IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate}">
+                                >
                             </Button>
                             <DatePicker
                                 Margin="5,5" 
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
                                 BorderBrush="LightSteelBlue"  
-                                SelectedDate="{Binding SelectedCategory.SelectedTheme.SelectedProblem.RepeatDate, UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="{Binding SelectedCategory.SelectedTheme.SelectedProblem.IsAutoRepeate, Converter={StaticResource BooleanInvertor}}"/>
+                                SelectedDate="{Binding SelectedToRepeatCategory.SelectedTheme.SelectedProblem.RepeatDate, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding SelectedToRepeatCategory.SelectedTheme.SelectedProblem.IsAutoRepeate, Converter={StaticResource BooleanInvertor}}"/>
                             <!--Button Content="Отложить на завтра" Style="{StaticResource XStyleToButton}" Command="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.MoveToTomorrowCommand}" Margin="3"/-->
                             <!--<Button Content="" Style="{StaticResource XStyleToButton}"  Margin="3"/>-->
                             
                         </StackPanel>
                     </Grid>
-                    <DataGrid x:Name="XDataGridProblems" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedCategory.SelectedToRepeatTheme.ProblemsToRepeatView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >
+                    <DataGrid x:Name="XDataGridProblems" Grid.Row="3" Grid.Column="0" ItemsSource="{Binding SelectedToRepeatCategory.SelectedToRepeatTheme.ProblemsToRepeatView}" VerticalAlignment="Stretch" Style="{StaticResource DataGridStyle}" Grid.RowSpan="2" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Вопросы" Binding="{Binding Question}" ElementStyle="{StaticResource TextBlockStyle}" Width="300*"  FontSize="14"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Label Content="Ответ" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center"></Label>
                     <ScrollViewer Grid.Row="4" Grid.Column="1">
-                        <TextBox Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="{Binding SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.RepeatAnswer}" AcceptsReturn="True" AcceptsTab="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  FontSize="16"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="{Binding SelectedToRepeatCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.RepeatAnswer}" AcceptsReturn="True" AcceptsTab="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  FontSize="16"/>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
