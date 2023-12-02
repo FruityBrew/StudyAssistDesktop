@@ -35,7 +35,7 @@ namespace StudyAssist
 
         private void SetOff_ButtonClick_EventHandler(object sender, RoutedEventArgs e)
         {
-            this._mainVM.SelectedCategory.SelectedToRepeatTheme.SelectedProblemToRepeat.StudyLevelUp();
+            this._mainVM.SelectedToRepeatCategory?.SelectedToRepeatTheme?.SelectedProblemToRepeat?.StudyLevelUp();
             _mainVM.RemoveRepeat();
         }
 
