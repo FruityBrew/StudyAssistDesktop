@@ -23,8 +23,6 @@ namespace StudyAssist
     {
         MainViewModel _mainVM;
 
-        
-
         public MainWindow()
         {
             
@@ -33,19 +31,18 @@ namespace StudyAssist
             InitializeComponent();
 
             this.DataContext = _mainVM;
-            //this.XDatePickerSetDate.CalendarOpened += ButtonSetDate_Click;
-        //    this.XButtonSetDate.Click += 
         }
 
-
-        private void ButtonSetDate_Click(object sender, RoutedEventArgs e)
+        private void SetOff_ButtonClick_EventHandler(object sender, RoutedEventArgs e)
         {
-          //  XDatePickerSetDate.CalendarOpened
+            this._mainVM.SelectedToRepeatCategory?.SelectedToRepeatTheme?.SelectedProblemToRepeat?.StudyLevelUp();
+            _mainVM.RemoveRepeat();
         }
 
-        private void DatePickerSetDate_Click(object sender, RoutedEventArgs e)
+        public void OnExit(object sender, EventArgs eventArgs)
         {
-            
+            Properties.Settings.Default.Save();
+
         }
     }
 }

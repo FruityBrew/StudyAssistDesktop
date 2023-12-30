@@ -2,12 +2,27 @@
 
 namespace StudyAssistInterfaces
 {
+    /// <summary>
+    /// Интерфейс модели.
+    /// </summary>
     public interface IModel
     {
-        void Init();
+        #region Properties
+
+        /// <summary>
+        /// Коллекция категорий с темами.
+        /// </summary>
+        ObservableCollection<ICategory> Categories { get; }
+
+        #endregion Properties
+
+        #region Methods 
+
+        /// <summary>
+        /// Сохраняет изменения в модели.
+        /// </summary>
         void SaveChange();
 
-        ObservableCollection<ICategory> Categories
-        { get; }
+        #endregion Methods 
     }
 }

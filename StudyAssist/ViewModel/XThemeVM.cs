@@ -1,17 +1,19 @@
-﻿using StudyAssistInterfaces;
+﻿using Ninject;
+using StudyAssistInterfaces;
 using StudyAssistIoC;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
-using Ninject;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows.Data;
 
 
 namespace StudyAssist.ViewModel
 {
     public class XThemeVM : XBaseViewModel
     {
-        #region fields
+        #region Fields
 
         ITheme _theme;
         ObservableCollection<XProblemVM> _problemsObsColl;
@@ -19,11 +21,117 @@ namespace StudyAssist.ViewModel
         ObservableCollection<XProblemVM> _problemsToRepeatObsColl;
         CollectionViewSource _problemsToRepeatCVS;
         Action _save;
+        private bool _isSearch;
 
-        #endregion
+        #endregion Fields
 
+        #region Properties
 
-        #region ctors
+        /// <summary>
+        /// Коллекция проблем.
+        /// </summary>
+        public ObservableCollection<XProblemVM> ProblemsObsColl
+        {
+            get { return _problemsObsColl; }
+        }
+
+        /// <summary>
+        /// Признак того, что тема на изучении.
+        /// </summary>
+        public Boolean IsStudy
+        {
+            get { return _theme.IsStudy; }
+            set
+            {
+                _theme.IsStudy = value;
+                Save();
+            }
+        }
+
+        /// <summary>
+        /// Название темы.
+        /// </summary>
+        public String Name
+        {
+            get { return _theme.Name; }
+
+            set
+            {
+                _theme.Name = value;
+
+                //            RaisePropertyChanged(this, "Name");
+                Save();
+            }
+        }
+
+        /// <summary>
+        /// КоллекшнВью всех проблем.
+        /// </summary>
+        public ICollectionView ProblemsCollView
+        {
+            get { return _problemsCVS.View; }
+        }
+
+        /// <summary>
+        /// Выбранная проблема.
+        /// </summary>
+        public XProblemVM SelectedProblem
+        {
+            get { return ProblemsCollView.CurrentItem as XProblemVM; }
+        }
+
+        /// <summary>
+        /// Коллекция проблем для повторения.
+        /// </summary>
+        public ICollectionView ProblemsToRepeatView
+        {
+            get { return _problemsToRepeatCVS.View; }
+        }
+
+        /// <summary>
+        /// Выбранная проблема для повторения.
+        /// </summary>
+        public XProblemVM SelectedProblemToRepeat
+        {
+            get { return ProblemsToRepeatView.CurrentItem as XProblemVM; }
+        }
+
+        /// <summary>
+        /// Интерфейс темы.
+        /// </summary>
+        public ITheme Theme
+        {
+            get { return _theme; }
+        }
+
+        /// <summary>
+        /// Метод сохранения изменений.
+        /// </summary>
+        public Action Save
+        {
+            get { return _save; }
+
+            set { _save = value; }
+        }
+
+        /// <summary>
+        /// Признак того, что список проблем на повторение пуст.
+        /// </summary>
+        public Boolean IsProblemRepeatEmpty
+        {
+            get
+            {
+                if (_problemsToRepeatObsColl.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        #endregion Properties
+
+        #region Ctors
+
         public XThemeVM()
         {
             _theme = XKernel.Instance.Get<ITheme>();
@@ -36,19 +144,68 @@ namespace StudyAssist.ViewModel
             this.Save = save;
             Init();
         }
-        
+
+        #endregion Ctors
+
+        #region Methods
+
+        public void RemoveFromRepeat()
+        {
+            _problemsToRepeatObsColl.Remove(SelectedProblemToRepeat);
+        }
+
+        public void UpdateRepeats(DateTime repeateDate)
+        {
+            _problemsToRepeatObsColl.Clear();
+
+            foreach (var problem in _problemsObsColl)
+            {
+                if (problem.RepeatDate <= repeateDate && problem.IsStudy)
+                    _problemsToRepeatObsColl.Add(problem);
+            }
+        }
+
+        public void UpdateProblems(string searchText)
+        {
+            _isSearch = true;
+            _problemsObsColl.Clear();
+            //List<XProblemVM> aux = new List<XProblemVM>();
+            foreach (var problem in _theme.Problems)
+            {
+
+                if(string.IsNullOrEmpty(searchText))
+                    _problemsObsColl.Add(new XProblemVM(problem, Save));
+                else if (problem.Answer.Contains(searchText))
+                    _problemsObsColl.Add(new XProblemVM(problem, Save));
+            }
+
+            //foreach (var problem in aux)
+            //    _problemsObsColl.Add(problem);
+            _isSearch = false;
+        }
+
+        #endregion Methods
+
+        #region Utilities
+
+        /// <summary>
+        /// Инициализирует внутренности.
+        /// </summary>
         private void Init()
-        {      
+        {
             _problemsObsColl = new ObservableCollection<XProblemVM>();
             _problemsToRepeatObsColl = new ObservableCollection<XProblemVM>();
+
             foreach (var problem in _theme.Problems)
             {
                 XProblemVM prob = new XProblemVM(problem, Save);
                 _problemsObsColl.Add(prob);
-                if (prob.RepeatDate <= DateTime.Today && !prob.IsStudy)
+                if (prob.RepeatDate <= DateTime.Today && prob.IsStudy)
                     _problemsToRepeatObsColl.Add(prob);
             }
-            _problemsObsColl.CollectionChanged += ProblemsObsColl_CollectionChanged;
+
+            _problemsObsColl.CollectionChanged +=
+                ProblemsObsColl_CollectionChanged;
 
             _problemsCVS = new CollectionViewSource();
             _problemsCVS.Source = _problemsObsColl;
@@ -56,131 +213,29 @@ namespace StudyAssist.ViewModel
 
             _problemsToRepeatCVS = new CollectionViewSource();
             _problemsToRepeatCVS.Source = _problemsToRepeatObsColl;
-            _problemsToRepeatCVS.View.CurrentChanged += ProblemsToRepeat_CurrentChanged;
+            _problemsToRepeatCVS.View.CurrentChanged += 
+                ProblemsToRepeat_CurrentChanged;
         }
 
+        #endregion Utilities
 
+        #region EventHandlers
 
-        #endregion
-
-
-        #region properties
-        public ObservableCollection<XProblemVM> ProblemsObsColl
+        private void ProblemsObsColl_CollectionChanged(
+            object sender, NotifyCollectionChangedEventArgs e)
         {
-            get
-            {
-                return _problemsObsColl;
-            }
-        }
+            if (_isSearch)
+                return;
 
-        public Boolean IsStudy
-        {
-            get
-            {
-                return _theme.IsStudy;
-            }
-            set
-            {
-                _theme.IsStudy = value;
-                Save();
-            }
-        }
-
-        public String Name
-        {
-            get 
-            {
-                return _theme.Name;
-            }
-
-            set
-            {
-                _theme.Name = value;
-    //            RaisePropertyChanged(this, "Name");
-                Save();
-            }
-        }
-
-
-        public ICollectionView ProblemsCollView
-        {
-            get
-            {
-                return _problemsCVS.View;
-            }
-        }
-
-        public XProblemVM SelectedProblem
-        {
-            get 
-            {
-                return ProblemsCollView.CurrentItem as XProblemVM;
-            }
-        }
-
-        public ICollectionView ProblemsToRepeatView
-        {
-            get
-            {
-                return _problemsToRepeatCVS.View;
-            }
-        }
-
-        public XProblemVM SelectedProblemToRepeat
-        {
-            get
-            {
-                return ProblemsToRepeatView.CurrentItem as XProblemVM;
-            }
-        }
-
-        public ITheme Theme
-        {
-            get
-            {
-                return _theme;
-            }
-        }
-
-        public Action Save
-        {
-            get
-            {
-                return _save;
-            }
-
-            set
-            {
-                _save = value;
-            }
-        }
-
-        public Boolean IsProblemRepeatEmpty
-        {
-            get
-            {           
-                if (_problemsToRepeatObsColl.Count == 0)
-                    return true;
-                else
-                    return false;
-            }
-        }
-
-        #endregion
-
-
-        #region eventHandlers
-
-        private void ProblemsObsColl_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 XProblemVM problem = e.NewItems[0] as XProblemVM;
                 problem.Save = this.Save;
                     _theme.Problems.Add(problem.Problem);
 
             }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+
+            if (e.Action == NotifyCollectionChangedAction.Remove)
                 _theme.Problems.Remove((IProblem)e.OldItems[0]);
 
             Save();
@@ -192,10 +247,12 @@ namespace StudyAssist.ViewModel
         }
 
 
-        private void ProblemsToRepeat_CurrentChanged(object sender, EventArgs e)
+        private void ProblemsToRepeat_CurrentChanged(
+            object sender, EventArgs e)
         {
             RaisePropertyChanged(this, "SelectedProblemToRepeat");
         }
-        #endregion
+
+        #endregion EventHandlers
     }
 }

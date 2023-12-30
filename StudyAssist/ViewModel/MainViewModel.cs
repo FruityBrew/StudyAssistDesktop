@@ -1,74 +1,192 @@
-﻿using System;
+﻿using Ninject;
 using StudyAssistInterfaces;
 using StudyAssistIoC;
-using Ninject;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 
 namespace StudyAssist.ViewModel
 {
+    /// <summary>
+    /// Вьюмодель.
+    /// </summary>
     public class MainViewModel : XBaseViewModel
     {
-        #region fields
+        #region Fields
 
         IModel _model;
         ObservableCollection<XCategoryVM> _categoriesObsColl;
-        //ObservableCollection<XCategoryVM> _categoriesObsCollToRepeat;
-       // CollectionViewSource _categoryToRepeatCVS;
         CollectionViewSource _categoriesCVS;
+        private ObservableCollection<XCategoryVM> _categoriesToRepeat;
+        private CollectionViewSource _categoriesToRepeatCVS;
+        private DateTime _repeatDate;
 
-        #endregion
+        #endregion Fields
 
+        #region Properties
 
-        #region ctors
+        public XCommand RemoveAllFromStudy { get; set; }
+
+        /// <summary>
+        /// Коллекция категорий.
+        /// </summary>
+        public ICollectionView CategoriesCollView
+        {
+            get { return _categoriesCVS.View; }
+        }
+
+        /// <summary>
+        /// Выбранная категория.
+        /// </summary>
+        public XCategoryVM SelectedCategory
+        {
+            get { return CategoriesCollView.CurrentItem as XCategoryVM; }
+        }
+
+        public ICollectionView CategoriesToRepeatCollView
+        {
+            get { return _categoriesToRepeatCVS.View; }
+        }
+
+        public XCategoryVM SelectedToRepeatCategory
+        {
+            get { return CategoriesToRepeatCollView.CurrentItem as XCategoryVM; }
+        }
+
+        public DateTime RepeatDate
+        {
+            get => _repeatDate;
+            set 
+            { 
+                _repeatDate = value;
+                RaisePropertyChanged(this, nameof(RepeatDate));
+                UpdateCategoriesToRepeatWhithRepeatDate();
+            }
+        }
+
+        #endregion Properties
+
+        #region Сtors
+
         public MainViewModel()
         {
             _model = XKernel.Instance.Get<IModel>();
+            RepeatDate = DateTime.Today;
+
             _categoriesObsColl = new ObservableCollection<XCategoryVM>();
-       //     _categoriesObsCollToRepeat = new ObservableCollection<XCategoryVM>();
+            _categoriesToRepeat = new ObservableCollection<XCategoryVM>();
+
+            List<string> defaultCats = Properties.Settings.Default.DefaultCategories
+                .Split(' ')
+                .ToList();
+
             foreach(var category in _model.Categories)
             {
-                _categoriesObsColl.Add(new XCategoryVM(category));
+                XCategoryVM categoryVM = new XCategoryVM(category);
+
+                foreach(var defaultName in defaultCats)
+                {
+                    if (categoryVM.Name.Contains(defaultName))
+                    {
+                        _categoriesObsColl.Add(categoryVM);
+
+                        if (!categoryVM.IsProblemRepeatEmpty)
+                            _categoriesToRepeat.Add(categoryVM);
+                    }
+                }
             }
-            _categoriesObsColl.CollectionChanged += CategoriesObsColl_CollectionChanged;
+
+            _categoriesObsColl.CollectionChanged += 
+                CategoriesObsColl_CollectionChanged;
+
             _categoriesCVS = new CollectionViewSource();
             _categoriesCVS.Source = _categoriesObsColl;
             _categoriesCVS.View.CurrentChanged += View_CurrentChanged;
+
+            _categoriesToRepeatCVS = new CollectionViewSource();
+            _categoriesToRepeatCVS.Source = _categoriesToRepeat;
+            _categoriesToRepeatCVS.View.CurrentChanged += 
+                CategoriesRepeatView_CurrentChanged;
+
+            RemoveAllFromStudy = new XCommand(_RemoveAllFromStudy);
         }
 
+        #endregion Ctors
 
-        #endregion
+        #region Utilities
 
-
-        #region properties
-
-        public ICollectionView CategoriesCollView
-            {
-                get 
-                {
-                    return _categoriesCVS.View;
-                }
-            }
-
-            public XCategoryVM SelectedCategory
-            {
-                get
-                {
-                    return CategoriesCollView.CurrentItem as XCategoryVM;
-                }
-            }
-        #endregion
-
-        #region eventHandlers
-
-        private void CategoriesObsColl_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        /// <summary>
+        /// Снимает все проблемы с обучения.
+        /// </summary>
+        private void _RemoveAllFromStudy()
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if(_categoriesObsColl?.Any() == false)
+                return;
+
+            foreach (XCategoryVM category in _categoriesObsColl)
+            {
+                foreach (XThemeVM theme in category.ThemesCollView.SourceCollection)
+                {
+                    foreach (XProblemVM problem in theme.ProblemsObsColl)
+                    {
+                        problem.RemoveFromStudy();
+                    }
+                }
+            }
+        }
+
+        #endregion Utilities
+
+        #region Methods
+
+        public void UpdateCategoriesToRepeatWhithRepeatDate()
+        {
+            if(_categoriesToRepeat == null) 
+                return;
+
+            _categoriesToRepeat.Clear();
+
+            foreach(var category in _categoriesObsColl)
+            {
+                category.UpdateRepeats(RepeatDate);
+                if(category.IsProblemRepeatEmpty == false)
+                    _categoriesToRepeat.Add(category);
+            }
+        }
+
+        public void RemoveRepeat()
+        {
+            SelectedToRepeatCategory.SelectedToRepeatTheme.RemoveFromRepeat();
+            if (SelectedToRepeatCategory.SelectedToRepeatTheme.IsProblemRepeatEmpty)
+            {
+                SelectedToRepeatCategory.RemoveRepeat();
+
+                if (SelectedToRepeatCategory.IsProblemRepeatEmpty)
+                    _categoriesToRepeat.Remove(SelectedToRepeatCategory);
+            }
+        }
+
+        #endregion Methods
+
+        #region EentHandlers
+
+        private void CategoriesRepeatView_CurrentChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(this, nameof(SelectedToRepeatCategory));
+        }
+
+        private void CategoriesObsColl_CollectionChanged(
+            object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {                
                 _model.Categories.Add(((XCategoryVM)e.NewItems[0]).Category);
             }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            if (e.Action == NotifyCollectionChangedAction.Remove)
                 _model.Categories.Remove((ICategory)e.OldItems[0]);
 
             //_model.SaveChange();
@@ -78,6 +196,7 @@ namespace StudyAssist.ViewModel
         {
             RaisePropertyChanged(this, "SelectedCategory");
         }
+
         #endregion
     }
 }

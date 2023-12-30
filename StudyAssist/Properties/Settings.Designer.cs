@@ -22,5 +22,17 @@ namespace StudyAssist.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C# SOLID Паттерны")]
+        public string DefaultCategories {
+            get {
+                return ((string)(this["DefaultCategories"]));
+            }
+            set {
+                this["DefaultCategories"] = value;
+            }
+        }
     }
 }
