@@ -214,6 +214,20 @@ namespace StudyAssist.ViewModel
         }
 
         /// <summary>
+        /// Перенести выполнение на несколько дней
+        /// </summary>
+        /// <param name="days">КОличество дней переноса</param>
+        public void RescheduleForFewDays(int days)
+        {
+            Problem.RescheduleFor(days);
+            Save();
+            RaisePropertyChanged(this, "RepeatDateString");
+            RaisePropertyChanged(this, "StudyLevel");
+            RaisePropertyChanged(this, "IsStudy");
+            RaisePropertyChanged(this, "RepeatDate");
+        }
+
+        /// <summary>
         /// Удаляет проблему с обучения.
         /// </summary>
         public void RemoveFromStudy()
@@ -278,6 +292,8 @@ namespace StudyAssist.ViewModel
         public XCommand AddToStudyCommand { get; set; }
 
         public XCommand RemoveFromStudyCommand { get; set; }
+
+        public XCommand RescheduleForFewDaysCommand { get; set; }
 
         #endregion
     }

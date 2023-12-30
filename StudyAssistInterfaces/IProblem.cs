@@ -69,6 +69,12 @@ namespace StudyAssistInterfaces
         void MoveToTomorrow();
 
         /// <summary>
+        /// Переносит дату повтора на несколько дней
+        /// </summary>
+        /// <param name="days">Количество дней</param>
+        void RescheduleFor(int days);
+
+        /// <summary>
         /// Удаляет вопрос с обучения.
         /// </summary>
         void RemoveFromStudy();

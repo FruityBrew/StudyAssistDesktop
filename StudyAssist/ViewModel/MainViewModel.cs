@@ -25,9 +25,15 @@ namespace StudyAssist.ViewModel
         private CollectionViewSource _categoriesToRepeatCVS;
         private DateTime _repeatDate;
 
+        //private int _rescheduledDays;
+
         #endregion Fields
 
         #region Properties
+
+        public string RescheduledDays { get; set; }  
+
+        public XCommand RescheduleForFewDays { get; set; }
 
         public XCommand RemoveAllFromStudy { get; set; }
 
@@ -113,6 +119,7 @@ namespace StudyAssist.ViewModel
                 CategoriesRepeatView_CurrentChanged;
 
             RemoveAllFromStudy = new XCommand(_RemoveAllFromStudy);
+            RescheduleForFewDays = new XCommand(_RescheduleAllProblemForFewDays);
         }
 
         #endregion Ctors
@@ -137,6 +144,31 @@ namespace StudyAssist.ViewModel
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Переносит все повторы на несколько дней
+        /// </summary>
+        private void _RescheduleAllProblemForFewDays()
+        {
+            if (_categoriesObsColl is null)
+                return;
+
+            if (!int.TryParse(RescheduledDays, out int reshDays) || reshDays <= 0)
+                return;
+
+            foreach (XCategoryVM category in _categoriesObsColl)
+            {
+                foreach (XThemeVM theme in category.ThemesCollView?.SourceCollection)
+                {
+                    foreach (XProblemVM problem in theme.ProblemsObsColl)
+                    {
+                        problem?.RescheduleForFewDays(reshDays);
+                    }
+                }
+            }
+
+            UpdateCategoriesToRepeatWhithRepeatDate();
         }
 
         #endregion Utilities

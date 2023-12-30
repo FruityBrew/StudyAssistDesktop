@@ -169,6 +169,17 @@ namespace StudyAssistModel
         }
 
         /// <summary>
+        /// Переносит дату повтора на несколько дней
+        /// </summary>
+        /// <param name="days">Количество дней</param>
+        public void RescheduleFor(int days)
+        {
+            if(RepeatDate.HasValue == false)
+                return;
+            RepeatDate = RepeatDate.Value.AddDays(days);
+        }
+
+        /// <summary>
         /// Удаляет проблему с обучения.
         /// </summary>
         public void RemoveFromStudy()
